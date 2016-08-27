@@ -19,6 +19,13 @@ class GitModel
 	private $repository = null;
 
 	/**
+	 * The last diff result.
+	 *
+	 * @var array
+	 */
+	private $lastDiff = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @param $repository string
@@ -29,23 +36,35 @@ class GitModel
 	}
 
 	/**
-	 * Walk.
-	 */
-	public function walk() 
-	{
-	}
-
-	/**
 	 * Diff.
 	 *
 	 * @param $oldTreeHash string
 	 * @param $newTreeHash string
+	 * @format $format int such as: 
+     *								GIT_DIFF_FORMAT_PATCH        = 1u < full git diff 
+	 *								GIT_DIFF_FORMAT_PATCH_HEADER = 2u < just the file headers of patch 
+	 *								GIT_DIFF_FORMAT_RAW          = 3u < like git diff --raw 
+	 *								GIT_DIFF_FORMAT_NAME_ONLY    = 4u < like git diff --name-only
+	 *								GIT_DIFF_FORMAT_NAME_STATUS  = 5u < like git diff --name-status 
+	 * @return array
 	 */
-	public function diff($oldTreeHash = 'd66c937ff6f7b108a9fe5f4a371cf93957172fe6', $newTreeHash = 'b2240b6a1c7c228f117cdff32449ec8f72409cfe') 
+	public function diffTreeToTree($oldTreeHash, $newTreeHash, $format = GIT_DIFF_FORMAT_PATCH) 
 	{
 		$newTree = git_tree_lookup($this->repository, $newTreeHash);
 		$oldTree = git_tree_lookup($this->repository, $oldTreeHash);
 		$opts = git_diff_options_init();
+		$result = array();
+		$fcc = array();
+		$this->lastDiff = array();
+		$fci = function($diff_delta, $diff_hunk, $diff_line, $payload) {
+			$result = '';
+			if ($diff_line['origin'] == "-" || $diff_line['origin'] == "+") {
+				$result = $diff_line['origin'];
+			}   
+			$result .= trim($diff_line['content'], "\n");
+			$this->lastDiff[] = $result;
+		};
+
 		/*
 		$opts['flags'] = 0;
 		$opts['version'] = 1;
@@ -61,14 +80,8 @@ class GitModel
 		$opts['notify_payload'] = null;
 		 */
 		$diff = git_diff_tree_to_tree($this->repository, $oldTree,  $newTree, $opts);
-//		$diff = git_diff_tree_to_workdir($this->repository,  $newTree,  $opts);
-		$p = array();
-		git_diff_print($diff, 2, function($diff_delta, $diff_hunk, $diff_line, $payload){
-			if ($diff_line['origin'] == "-" || $diff_line['origin'] == "+") {
-				echo $diff_line['origin'];
-			}   
-			echo $diff_line['content'];
-		}, $p);
+		git_diff_print($diff, $format, $fci, $fcc);
+		return $this->lastDiff;
 	}
 
 	/**
@@ -77,10 +90,9 @@ class GitModel
 	 * @param $commitHash string
 	 * @return array
 	 */
-	public function getCommitInfo($commitHash = '118731') 
+	public function commitInfo($commitHash) 
 	{
 		$result= array();
-//		$commit = git_commit_lookup($this->repository, $commitHash);	
 		$commit = git_commit_lookup_prefix($this->repository, $commitHash, strlen($commitHash));	
 		$result['author']  = git_commit_author($commit);
 		$result['message'] = git_commit_message($commit);
@@ -92,6 +104,23 @@ class GitModel
 		$result['committer'] = git_commit_committer($commit);
 		$result['time'] = git_commit_time($commit);
 		$result['id'] = git_commit_id($commit);
+		return $result;
+	}
+
+	/**
+	 * Get commit hash array through revwalk.
+	 *
+	 * @param $commitHash string
+	 * @return array
+	 */
+	public function revwalk($commitHash)
+	{
+		$walker = git_revwalk_new($this->repository);
+		$result = array();
+		git_revwalk_push_range($walker, "{$commitHash}..HEAD");
+		while ($id = git_revwalk_next($walker)) {
+			$result[] = $id;
+		}
 		return $result;
 	}
 }
