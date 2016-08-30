@@ -9,6 +9,8 @@
 
 namespace Library\Model;
 
+use Library\Util\Config;
+
 class GitModel
 {
 	/**
@@ -123,4 +125,32 @@ class GitModel
 		}
 		return $result;
 	}
+
+	/**
+	 * Git pull with shell.
+	 *
+	 * @TODO change to use the extension method with php-git.
+	 *
+	 * @param $name string
+	 * @param $branch string
+	 * @return string
+	 */
+	public function pull($name = 'origin', $branch = 'master') 
+	{
+		$hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git pull {$name} {$branch} 2>&1");	
+		return $hup;
+	}
+
+	/*
+	public function merge() 
+	{
+		cl_git_pass(git_reference_lookup(&their_ref, repo, "heads/master"));
+		cl_git_pass(git_merge_head_from_ref(&their_head, repo, their_ref));
+		cl_git_fail((error = git_merge(&result, repo, (const git_merge_head **)&their_head, 1, &opts)));
+		$theirRef = git_reference_lookup($this->repository, 'refs/heads/master');
+		$theirHead = git_merge_head_from_ref($this->repository, $theirRef);
+		$rs = git_merge($this->repository, $theirHead, array());
+		var_dump($rs);
+	}
+	*/
 }

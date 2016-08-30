@@ -44,6 +44,7 @@ class GitBuildController extends AbstractController
 		/* git model */
 		$repository = Config::get("common.product.cmd_path");
 		$gitModel = new GitModel($repository);
+		$gitModel->pull();
 		$lastCommitHash = '942382fb26ca94f381f5c84597b4974b1acbf027';
 		$walks = $gitModel->revwalk($lastCommitHash);
 		array_push($walks, $lastCommitHash);
@@ -60,6 +61,9 @@ class GitBuildController extends AbstractController
 			$diffsMap[$commits[$i]['id']] = $gitModel->diffTreeToTree($commits[$i]['tree_id'], 
 				$commits[$i + 1]['tree_id'], 
 				GIT_DIFF_FORMAT_NAME_STATUS);	
+		}
+		if ($length) {
+			$lastCommitHash = $commits[0]['id'];
 		}
 
 		/* view */
