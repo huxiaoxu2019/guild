@@ -1389,7 +1389,7 @@ pre code {
 }
 .container {
   padding-left: 25px;
-  padding-right: 25px;
+  padding-right:25px;
 }
 @media (min-width: 768px) {
   .container {
@@ -2115,17 +2115,11 @@ th {
 .table-bordered > thead > tr > td,
 .table-bordered > tbody > tr > td,
 .table-bordered > tfoot > tr > td {
- border: 1px solid #ddd;
-}
-.table-bordered > tbody > tr > td {
-	word-break: break-word;
+  border: 1px solid #ddd;
 }
 .table-bordered > thead > tr > th,
 .table-bordered > thead > tr > td {
   border-bottom-width: 2px;
-}
-.table-bordered > tbody > td {
-  word-break: break-all;
 }
 .table-striped > tbody > tr:nth-child(odd) {
   background-color: #f9f9f9;

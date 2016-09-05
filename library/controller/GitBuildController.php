@@ -67,11 +67,11 @@ class GitBuildController extends AbstractController
 			$lastCommitHash = $commits[0]['id'];
 		}
 
-		/* mail */
-		Mail::send('huxu@staff.weibo.com', '', 'test s', 'test b');
-
 		/* view */
 		$html = $this->view->fetch("gray.tpl");
+
+		/* mail */
+		Mail::send('huxu@staff.weibo.com', '', 'test s', $html);
 
 	}
 
