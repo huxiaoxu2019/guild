@@ -14,6 +14,7 @@ use Library\Util\FileDatabase;
 use Library\Util\Config;
 use Library\Util\Mail;
 use Library\Model\GitModel;
+use Library\Model\MailModel;
 
 class GitBuildController extends AbstractController
 {
@@ -38,41 +39,10 @@ class GitBuildController extends AbstractController
 	{
 		Helper::logLn(RUNTIME_LOG, "Building to gray level simulation environment...");
 
-		/* db */
-		$fileDatabase = new FileDatabase();
-		$lastVersion = $fileDatabase->get(FileDatabase::FILENAME_GIT, 'lastVersion');
-
-		/* git model */
-		$repository = Config::get("common.product.cmd_path");
-		$gitModel = new GitModel($repository);
-		$gitModel->pull();
-		$lastCommitHash = '942382fb26ca94f381f5c84597b4974b1acbf027';
-		$walks = $gitModel->revwalk($lastCommitHash);
-		array_push($walks, $lastCommitHash);
-		$length = count($walks);
-		$commits = array();
-		$commitsMap = array();
-		$diffsMap = array();
-
-		foreach ($walks as $walk) {
-			$commits[] = $gitModel->commitInfo($walk);
-		}
-		for ($i = 0; $i < $length - 1; $i++) {
-			$commitsMap[$commits[$i]['id']] = $commits[$i];
-			$diffsMap[$commits[$i]['id']] = $gitModel->diffTreeToTree($commits[$i]['tree_id'], 
-				$commits[$i + 1]['tree_id'], 
-				GIT_DIFF_FORMAT_NAME_STATUS);	
-		}
-		if ($length) {
-			$lastCommitHash = $commits[0]['id'];
-		}
-
-		/* view */
-		$html = $this->view->fetch("gray.tpl");
-
-		/* mail */
-		Mail::send('huxu@staff.weibo.com', '', 'test s', $html);
-
+		/* send mail */
+		$mailModel = new MailModel(MailModel::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY); 
+		$mailModel->getContent();
+//		Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $mailModel->getContent());
 	}
 
 	/**
@@ -82,4 +52,5 @@ class GitBuildController extends AbstractController
 	{
 		$gitModel = new GitModel();
 	}
+
 }
