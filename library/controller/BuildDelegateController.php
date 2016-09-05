@@ -49,7 +49,7 @@ class BuildDelegateController
 	 */
 	private function _getCSV($type)
 	{
-		switch($type) {
+		switch ($type) {
 	    case VCS_GIT:
 			$vcs = self::GIT;	
 			break;
