@@ -22,4 +22,14 @@ class ProductModel
 	{
 		return Config::get("common.product");
 	}
+
+	/**
+	 * Get info.
+	 *
+	 * @return string
+	 */
+	public function getDescriptionInfo()
+	{
+		return Config::get("common.app.desc");
+	}
 }
