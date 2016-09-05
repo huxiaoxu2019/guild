@@ -1,6 +1,6 @@
 <?php
 /**
- * Topic Daily Build System.
+ * Guild - Topic Daily Build System.
  *
  * @link       http://git.intra.weibo.com/huati/daily-build
  * @copyright  Copyright (c) 2009-2016 Weibo Inc. (http://weibo.com)
@@ -12,6 +12,7 @@ namespace Library\Controller;
 use Library\Util\Helper;
 use Library\Util\FileDatabase;
 use Library\Util\Config;
+use Library\Util\Mail;
 use Library\Model\GitModel;
 
 class GitBuildController extends AbstractController
@@ -65,6 +66,9 @@ class GitBuildController extends AbstractController
 		if ($length) {
 			$lastCommitHash = $commits[0]['id'];
 		}
+
+		/* mail */
+		Mail::send('huxu@staff.weibo.com', '', 'test s', 'test b');
 
 		/* view */
 		$html = $this->view->fetch("gray.tpl");

@@ -1,6 +1,6 @@
 <?php
 /**
- * Topic Daily Build System.
+ * Guid - Topic Daily Build System.
  *
  * @link       http://git.intra.weibo.com/huati/daily-build
  * @copyright  Copyright (c) 2009-2016 Weibo Inc. (http://weibo.com)
