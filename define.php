@@ -31,6 +31,14 @@ if (!defined("VCS")) {
 	define("VCS", "git");
 }
 
+if (!defined("VCS_GIT")) {
+	define("VCS_GIT", "git");
+}
+
+if (!defined("VCS_SVN")) {
+	define("VCS_SVN", "svn");
+}
+
 if (!defined("SHOW_COMMIT")) {
 	define("SHOW_COMMIT", "true");
 }
@@ -58,3 +66,4 @@ if (!defined('SMARTY_TEMPLATE_DIR')) {
 if (!defined('SMARTY_COMPILE_DIR')) {
 	define('SMARTY_COMPILE_DIR', APP_PATH . '/data/runtime/' . date('Y/m/d/', time()) . 'smarty/compile/');
 }
+

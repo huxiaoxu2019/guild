@@ -50,13 +50,16 @@ class BuildDelegateController
 	private function _getCSV($type)
 	{
 		switch($type) {
-	    case 'git':
-			$csv = self::GIT;	
+	    case VCS_GIT:
+			$vcs = self::GIT;	
+			break;
+		case VCS_SVN:
+			$vcs = self::SVN;	
 			break;
 		default :
-			$csv = self::SVN;
+			$vcs = self::SVN;
 			break;
 		}
-		return $csv;
+		return $vcs;
 	}
 }
