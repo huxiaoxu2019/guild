@@ -67,3 +67,18 @@ if (!defined('SMARTY_COMPILE_DIR')) {
 	define('SMARTY_COMPILE_DIR', APP_PATH . '/data/runtime/' . date('Y/m/d/', time()) . 'smarty/compile/');
 }
 
+if (!defined('DEPLOY_TYPE_TO_ALL_ONLINE_SUCCESSFULLY_NAME')) {
+	define('DEPLOY_TYPE_TO_ALL_ONLINE_SUCCESSFULLY_NAME', 'Daily Build Online Environment');
+}
+
+if (!defined('DEPLOY_TYPE_TO_ALL_ONLINE_FAILED_NAME')) {
+	define('DEPLOY_TYPE_TO_ALL_ONLINE_FAILED_NAME', 'Daily Build Online Environment');
+}
+
+if (!defined('DEPLOY_TYPE_TO_GRAY_LEVEL_SUCCESSFULLY_NAME')) {
+	define('DEPLOY_TYPE_TO_GRAY_LEVEL_SUCCESSFULLY_NAME', 'Daily Build Gray Level Online Environment');
+}
+
+if (!defined('DEPLOY_TYPE_TO_GRAY_LEVEL_FAILED_NAME')) {
+	define('DEPLOY_TYPE_TO_GRAY_LEVEL_FAILED_NAME', 'Daily Build Gray Level Online Environment');
+}
