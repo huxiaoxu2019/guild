@@ -35,6 +35,13 @@ class MailModel
 	 */
 	private $deployType = 0;
 
+	/*
+	 * Mail subject.
+	 *
+	 * @var string
+	 */
+	private $subject = '';
+
 	/**
 	 * Constructor.
 	 *
@@ -59,6 +66,7 @@ class MailModel
 			'product_description' => '', 
 			'product' => array(),
 			'test' => '',
+			'subject' => '',
 			'vcs' => array());
 		/* Get Product Description */
 		$content['product_description'] = $this->getProductDescriptionInfo();	
@@ -75,6 +83,11 @@ class MailModel
 
 		/* test */
 		$content['test'] = $this->getTestInfo();
+
+		/* subject */
+		$content['subject'] = $this->getSubject();
+		var_dump($this->getSubject());
+		exit;
 
 		/* return */
 		return $content;
@@ -105,7 +118,32 @@ class MailModel
 	 *
 	 * @return string
 	 */
-	public function getSubject() {}
+	public function getSubject() {
+		if (!$this->subject)
+		{
+			switch ($this->deployType)
+			{
+			case self::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY :
+				$title = Config::get("common.app.suc_title");
+				break;
+			case self::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED :
+				$title = Config::get("common.app.fai_title");
+				break;
+			case self::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY :
+				$title = Config::get("common.app.suc_title");
+				break;
+			case self::TYPE_DEPLOY_TO_GRAY_LEVEL_FAILED :
+				$title = Config::get("common.app.fai_title");
+				break;
+			default :
+				$title = Config::get("common.app.fai_title");
+				break;
+			}
+			$build = date("ym.d", time()) . '01';
+			$this->subject = sprintf($title, $build, '');
+		}
+		return $this->subject;
+	}
 
 	/**
 	 * Get product info.
