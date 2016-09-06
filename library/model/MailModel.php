@@ -28,8 +28,18 @@ class MailModel
 	const TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY = 3;
 	const TYPE_DEPLOY_TO_GRAY_LEVEL_FAILED       = 4;
 
+	/**
+	 * Deploty type.
+	 *
+	 * @var int
+	 */
 	private $deployType = 0;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param int $deployType
+	 */
 	public function __construct($deployType = self::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY) 
 	{
 		Helper::logLn(RUNTIME_LOG, "MailModel...");
@@ -46,10 +56,12 @@ class MailModel
 	{
 		/* define */
 		$content = array(
-			'produt_description' => '', 
+			'product_description' => '', 
+			'product' => array(),
+			'test' => '',
 			'vcs' => array());
 		/* Get Product Description */
-		$content['produt_description'] = $this->getProductDescriptionInfo();	
+		$content['product_description'] = $this->getProductDescriptionInfo();	
 
 		/* Get VCS info */
 		if (VCS == VCS_GIT) {
@@ -58,24 +70,42 @@ class MailModel
 			$content['vcs'] = $this->getSVNInfo();
 		}
 
+		/* product */
+		$content['product'] = $this->getProductInfo();
+
+		/* test */
+		$content['test'] = $this->getTestInfo();
+
 		/* return */
 		return $content;
 	}
 
+	/**
+	 * Get email address(to).
+	 *
+	 * @return string
+	 */
 	public function getTo() 
 	{
 		return Config::get('mail.receiver.to');
 	}
 
+	/**
+	 * Get email address(cc).
+	 *
+	 * @return string
+	 */
 	public function getCc() 
 	{
 		return Config::get('mail.receiver.cc');
 	}
 
-	public function getSubject() 
-	{
-		
-	}
+	/*
+	 * Get mail subject.
+	 *
+	 * @return string
+	 */
+	public function getSubject() {}
 
 	/**
 	 * Get product info.
@@ -128,14 +158,21 @@ class MailModel
 		return $result;
 	}
 
-	private function getSVNInfo() 
-	{
+	/**
+	 * Get SVN info.
+	 *
+	 * @return array
+	 */
+	private function getSVNInfo() {}
 
-	}
-
+	/**
+	 * Get test info.
+	 *
+	 * @return string
+	 */
 	private function getTestInfo() 
 	{
-
+		return Config::get('common.test.desc');
 	}
 
 	/**
