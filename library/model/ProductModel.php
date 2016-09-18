@@ -20,7 +20,20 @@ class ProductModel
 	 */
 	public function getInfo()
 	{
-		return Config::get("common.product");
+		$result = Config::get("common.product");
+		switch (VCS) 
+		{
+		case VCS_GIT :
+			$result['vcs_url'] = $result['git_url'];
+			break;
+		case VCS_SVN :
+			$result['vcs_url'] = $result['svn_url'];
+			break;
+		default :
+			$result['vcs_url'] = $result['svn_url'];
+			break;
+		}
+		return $result;
 	}
 
 	/**
