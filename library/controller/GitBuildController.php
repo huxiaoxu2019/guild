@@ -12,6 +12,7 @@ namespace Library\Controller;
 use Library\Util\Helper;
 use Library\Util\Config;
 use Library\Util\Mail;
+use Library\Util\Sync;
 use Library\Model\GitModel;
 use Library\Model\MailModel;
 
@@ -38,10 +39,18 @@ class GitBuildController extends AbstractController
 	{
 		Helper::logLn(RUNTIME_LOG, "Building to gray level simulation environment...");
 
-		/* send mail */
+		/* deploy code */
+		Sync::deploy();
+
+		/* get mail content */
+		Helper::logLn(RUNTIME_LOG, 'Get mail content, includes commit, product_description, product, test info, subject, vcs and so on...');
 		$mailModel = new MailModel(MailModel::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY); 
 		$this->view->assign('data', $mailModel->getContent());
-		Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $this->view->fetch('gray.tpl'));
+
+		/* send mail */
+		Helper::logLn(RUNTIME_LOG, 'Sending email...');
+		$sendMailResult = Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $this->view->fetch('gray.tpl'));
+		Helper::logLn(RUNTIME_LOG, 'Mail sent.');
 	}
 
 	/**
