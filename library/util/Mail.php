@@ -53,7 +53,7 @@ class Mail
 			}
 			$mail->WordWrap = 80; 
 			$mail->IsHTML(true); 
-			$mail->Send(); 
+			$result = $mail->Send(); 
 		} catch (Exception $e) {
 			$result = false;
 			if (Helper::isDebug()) {
