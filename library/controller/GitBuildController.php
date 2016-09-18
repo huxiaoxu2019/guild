@@ -10,7 +10,6 @@
 namespace Library\Controller;
 
 use Library\Util\Helper;
-use Library\Util\FileDatabase;
 use Library\Util\Config;
 use Library\Util\Mail;
 use Library\Model\GitModel;
@@ -41,8 +40,8 @@ class GitBuildController extends AbstractController
 
 		/* send mail */
 		$mailModel = new MailModel(MailModel::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY); 
-		$mailModel->getContent();
-//		Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $mailModel->getContent());
+		$this->view->assign('data', $mailModel->getContent());
+		Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $this->view->fetch('gray.tpl'));
 	}
 
 	/**
@@ -50,7 +49,6 @@ class GitBuildController extends AbstractController
 	 */
 	private function buildToOnlineEnv()
 	{
-		$gitModel = new GitModel();
 	}
 
 }
