@@ -33,6 +33,8 @@ class GitBuildController extends AbstractController
 	/**
 	 * Build to gray level simulation environment.
 	 *
+	 * @TODO check php syntax; the git commit data is right?
+	 *
 	 * For test now.
 	 */
 	private function buildToGrayLevelSimulationEnv()
