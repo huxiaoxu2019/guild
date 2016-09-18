@@ -49,7 +49,7 @@ class GitBuildController extends AbstractController
 
 		/* send mail */
 		Helper::logLn(RUNTIME_LOG, 'Sending email...');
-		$sendMailResult = Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $this->view->fetch('gray.tpl'));
+		$sendMailResult = Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $this->view->fetch('gray.tpl'), ATTACHMENT);
 		Helper::logLn(RUNTIME_LOG, 'Mail sent.');
 	}
 
