@@ -220,6 +220,24 @@ class MailModel
 	private function getProductDescriptionInfo()
    	{
 		$productModel = new ProductModel();	
-		return $productModel->getDescriptionInfo();
+		$info = $productModel->getDescriptionInfo();
+		switch ($this->deployType)
+		{
+		case self::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY:
+			break;
+		case self::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED:
+			break;
+		case self::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY:
+			$info .= '<br />' . $productModel->getGrayInfo();
+			break;
+		case self::TYPE_DEPLOY_TO_GRAY_LEVEL_FAILED:
+			$info .= '<br />' . $productModel->getGrayInfo();
+			break;
+		default:
+			break;
+		}
+		$plan_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:00:00', time())) + 4 * 60 * 60);
+		$info = sprintf($info, $plan_time);
+		return $info;
 	}
 }
