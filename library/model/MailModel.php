@@ -63,6 +63,7 @@ class MailModel
 	{
 		/* define */
 		$content = array(
+			'commit' => '',
 			'product_description' => '', 
 			'product' => array(),
 			'test' => '',
@@ -86,8 +87,6 @@ class MailModel
 
 		/* subject */
 		$content['subject'] = $this->getSubject();
-		var_dump($this->getSubject());
-		exit;
 
 		/* return */
 		return $content;
@@ -139,7 +138,7 @@ class MailModel
 				$title = Config::get("common.app.fai_title");
 				break;
 			}
-			$build = date("ym.d", time()) . '01';
+			$build = '.' . date("ymd", time()) . '01';
 			$this->subject = sprintf($title, $build, '');
 		}
 		return $this->subject;
