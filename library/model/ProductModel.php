@@ -45,4 +45,14 @@ class ProductModel
 	{
 		return Config::get("common.app.desc");
 	}
+
+	/**
+	 * Get gray info.
+	 *
+	 * @return string
+	 */
+	public function getGrayInfo()
+	{
+		return Config::get('common.app.gray_desc');
+	}
 }
