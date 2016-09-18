@@ -52,6 +52,7 @@ class Helper
 	 * @param $msg string
 	 */
 	public static function logLn($filename, $msg) {
+		self::consoleLn($msg);
 		$path = dirname($filename);
 		if (!is_dir($path)) {
 			mkdir(iconv("UTF-8", "GBK", $path), 0777, true); 
