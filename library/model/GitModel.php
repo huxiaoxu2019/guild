@@ -207,7 +207,7 @@ class GitModel
 				return;
 				break;
 			case 'Date':
-				$source_arr['date'] = trim($pre[1]);
+				$source_arr['date'] = strtotime(trim($pre[1]));
 				return;
 				break;
 			default:

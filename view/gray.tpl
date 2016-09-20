@@ -44,7 +44,7 @@
 					      {$vo['merge']}
 					  {/if}
 					  </td>
-                      <td>{$vo['date']}</td>
+                      <td>{$vo['date']|date_format:"%Y-%m-%d %H:%M:%S"}</td>
                     </tr>
 		            {/foreach}
                   </tbody>
