@@ -216,6 +216,6 @@ class GitModel
 		if (empty($source_arr['message'])) {
 			$source_arr['message'] = '';
 		}
-		$source_arr['message'] .= $string . "\n";
+		$source_arr['message'][] = $string;
 	}
 }

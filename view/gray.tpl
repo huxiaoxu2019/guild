@@ -23,7 +23,7 @@
                   <thead>
                     <tr>
                       <th>Revision</th>
-                      <th>Description</th>
+                      <th>Message</th>
                       <th>Author</th>
                       <th>File</th>
                       <th>Time</th>
@@ -33,7 +33,11 @@
 					{foreach from=$data.vcs item=vo}
                     <tr>
                       <td>{$vo['commit']|substr:0:8}</td>
-                      <td>{$vo['message']}</td>
+                      <td>
+					  {foreach from=$vo.message item=voo}
+	                      {$voo}<br />
+	                  {/foreach}
+					  </td>
                       <td>{$vo['author']}</td>
                       <td class='break-all'>
 					  {if isset($vo['diff'])}
