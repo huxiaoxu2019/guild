@@ -162,9 +162,6 @@ class MailModel
 	 */
 	private function getGitInfo() 
 	{
-		/* define */
-		$result = array('commitsMap' => array(), 'diffsMap' => array());
-
 		/* db */
 		$fileDatabase = new FileDatabase();
 		$lastCommitHash = $fileDatabase->get(FileDatabase::FILENAME_GIT, 'lastVersion');
@@ -172,24 +169,7 @@ class MailModel
 		/* git model */
 		$repository = Config::get("common.product.cmd_path");
 		$gitModel = new GitModel($repository);
-		$gitModel->pull();
-		$walks = $gitModel->revwalk($lastCommitHash);
-		array_push($walks, $lastCommitHash);
-		$length = count($walks);
-		$commits = array();
-
-		foreach ($walks as $walk) {
-			$commits[] = $gitModel->commitInfo($walk);
-		}
-		for ($i = 0; $i < $length - 1; $i++) {
-			$result['commitsMap'][$commits[$i]['id']] = $commits[$i];
-			$result['diffsMap'][$commits[$i]['id']] = $gitModel->diffTreeToTree($commits[$i]['tree_id'], 
-				$commits[$i + 1]['tree_id'], 
-				GIT_DIFF_FORMAT_NAME_STATUS);	
-		}
-		if ($length) {
-			$lastCommitHash = $commits[0]['id'];
-		}
+	    $result = $gitModel->log();		
 		
 		/* return */
 		return $result;

@@ -30,17 +30,21 @@
                     </tr>
                   </thead>
                   <tbody>
-					{foreach from=$data.vcs.commitsMap item=vo}
+					{foreach from=$data.vcs item=vo}
                     <tr>
-                      <td>{$vo['id']|substr:0:8}</td>
+                      <td>{$vo['commit']|substr:0:8}</td>
                       <td>{$vo['message']}</td>
-                      <td>{$vo['author']['name']}</td>
+                      <td>{$vo['author']}</td>
                       <td class='break-all'>
-					  {foreach from=$data.vcs.diffsMap[$vo['id']] item=voo}
+					  {if isset($vo['diff'])}
+					  {foreach from=$vo.diff item=voo}
 	                      {$voo}<br />
 	                  {/foreach}
+					  {else}
+					      {$vo['merge']}
+					  {/if}
 					  </td>
-                      <td>{$vo['time']|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                      <td>{$vo['date']}</td>
                     </tr>
 		            {/foreach}
                   </tbody>

@@ -141,16 +141,81 @@ class GitModel
 		return $hup;
 	}
 
-	/*
-	public function merge() 
+	/**
+	 * Git log.
+	 *
+	 * @param $number int 
+	 * @return array
+	 */
+	public function log($number = 12)
 	{
-		cl_git_pass(git_reference_lookup(&their_ref, repo, "heads/master"));
-		cl_git_pass(git_merge_head_from_ref(&their_head, repo, their_ref));
-		cl_git_fail((error = git_merge(&result, repo, (const git_merge_head **)&their_head, 1, &opts)));
-		$theirRef = git_reference_lookup($this->repository, 'refs/heads/master');
-		$theirHead = git_merge_head_from_ref($this->repository, $theirRef);
-		$rs = git_merge($this->repository, $theirHead, array());
-		var_dump($rs);
+		$hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git log --name-status -n{$number} 2>&1");	
+		$line_arr = explode("\n", $hup);
+		$result = array();
+		$length = count($line_arr);
+		$current_commit = '';
+		for ($i = 0; $i < $length; $i++) {
+			if (strpos($line_arr[$i], "commit") === 0) {
+				$current_commit = trim(substr($line_arr[$i], 6));
+				$result[$current_commit]['commit'] = $current_commit;
+			} else {
+				$this->_setAttr($result[$current_commit], $line_arr[$i]);	
+			}
+		}
+		return $result;
 	}
-	*/
+
+	/**
+	 * Set attr.
+	 *
+	 * @param $source_arr array
+	 * @param $string string
+	 */
+	private function _setAttr(& $source_arr, $string) {
+		$string = trim($string);
+		if (!$string) {
+			return ;
+		}
+		$pre = trim(substr($string, 0, 2));
+		switch ($pre) {
+		case 'M':
+			$source_arr['diff'][] = $string;
+			return;
+			break;
+		case 'D':
+			$source_arr['diff'][] = $string;
+			return;
+			break;
+		case 'A':
+			$source_arr['diff'][] = $string;
+			return;
+			break;
+		default:
+			break;
+		}
+		$pre = explode(": ", $string);
+		if (empty($pre[0])) {
+			$pre[0] = '';
+		}
+		switch ($pre[0]) {
+			case 'Merge':
+				$source_arr['merge'] = trim($pre[1]);
+				return;
+				break;
+			case 'Author':
+				$source_arr['author'] = trim($pre[1]);
+				return;
+				break;
+			case 'Date':
+				$source_arr['date'] = trim($pre[1]);
+				return;
+				break;
+			default:
+				break;
+		}
+		if (empty($source_arr['message'])) {
+			$source_arr['message'] = '';
+		}
+		$source_arr['message'] .= $string . "\n";
+	}
 }
