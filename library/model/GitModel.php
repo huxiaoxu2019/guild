@@ -119,7 +119,7 @@ class GitModel
 			case 'Merge':
 				$source_arr['merge'] = trim($pre[1]);
 				$commit_hash = explode(" ", $pre[1]);
-				$source_arr['merge_diff'] = $this->diffWithNameStatus($commit_hash[1], $commit_hash[0]);
+				$source_arr['merge_diff'] = $this->diffWithNameStatus($commit_hash[0], $source_arr['commit']);
 				return;
 				break;
 			case 'Author':
