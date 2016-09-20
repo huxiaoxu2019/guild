@@ -45,7 +45,10 @@
 	                      {$voo}<br />
 	                  {/foreach}
 					  {else}
-					      {$vo['merge']}
+					      {$vo['merge']}<br />
+					      {foreach from=$vo.merge_diff item=voo}
+	                          {$voo}<br />
+	                      {/foreach}
 					  {/if}
 					  </td>
                       <td>{$vo['date']|date_format:"%Y-%m-%d %H:%M:%S"}</td>

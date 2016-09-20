@@ -51,7 +51,7 @@ class GitModel
 	 * @param $number int 
 	 * @return array
 	 */
-	public function log($number = 12)
+	public function logWithNameStatus($number = 12)
 	{
 		$hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git log --name-status -n{$number} 2>&1");	
 		$line_arr = explode("\n", $hup);
@@ -63,10 +63,24 @@ class GitModel
 				$current_commit = trim(substr($line_arr[$i], 6));
 				$result[$current_commit]['commit'] = $current_commit;
 			} else {
-				$this->_setAttr($result[$current_commit], $line_arr[$i]);	
+				$this->setAttr($result[$current_commit], $line_arr[$i]);	
 			}
 		}
 		return $result;
+	}
+
+	/**
+	 * Diff with name status parameter.
+	 *
+	 * @param $oldCommitHash string
+	 * @param $newCommitHash string
+	 * @return array
+	 */
+	public function diffWithNameStatus($oldCommitHash, $newCommitHash)
+	{
+		$hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git diff {$oldCommitHash} {$newCommitHash} --name-status 2>&1");	
+		$line_arr = explode("\n", $hup);
+		return $line_arr;
 	}
 
 	/**
@@ -75,7 +89,7 @@ class GitModel
 	 * @param $source_arr array
 	 * @param $string string
 	 */
-	private function _setAttr(& $source_arr, $string) {
+	private function setAttr(& $source_arr, $string) {
 		$string = trim($string);
 		if (!$string) {
 			return ;
@@ -104,6 +118,8 @@ class GitModel
 		switch ($pre[0]) {
 			case 'Merge':
 				$source_arr['merge'] = trim($pre[1]);
+				$commit_hash = explode(" ", $pre[1]);
+				$source_arr['merge_diff'] = $this->diffWithNameStatus($commit_hash[1], $commit_hash[0]);
 				return;
 				break;
 			case 'Author':

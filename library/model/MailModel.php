@@ -169,7 +169,7 @@ class MailModel
 		/* git model */
 		$repository = Config::get("common.product.cmd_path");
 		$gitModel = new GitModel($repository);
-	    $result = $gitModel->log();		
+	    $result = $gitModel->logWithNameStatus();		
 		
 		/* return */
 		return $result;
