@@ -19,49 +19,49 @@ use Library\Util\FileDatabase;
 
 class GitBuildController extends AbstractController
 {
-	/**
-	 * Build method.
-	 */
-	public function go()
-	{
-		if(ONLINE_ALL === "true") {
-			$this->buildToOnlineEnv();
-		} else {
-			$this->buildToGrayLevelSimulationEnv();
-		}
-	}
+    /**
+     * Build method.
+     */
+    public function go()
+    {
+        if(ONLINE_ALL === "true") {
+            $this->buildToOnlineEnv();
+        } else {
+            $this->buildToGrayLevelSimulationEnv();
+        }
+    }
 
-	/**
-	 * Build to gray level simulation environment.
-	 *
-	 * @TODO check php syntax; the git commit data is right?
-	 *
-	 * For test now.
-	 */
-	private function buildToGrayLevelSimulationEnv()
-	{
-		Helper::logLn(RUNTIME_LOG, "Building to gray level simulation environment...");
+    /**
+     * Build to gray level simulation environment.
+     *
+     * @TODO check php syntax; the git commit data is right?
+     *
+     * For test now.
+     */
+    private function buildToGrayLevelSimulationEnv()
+    {
+        Helper::logLn(RUNTIME_LOG, "Building to gray level simulation environment...");
 
         /* some build info */
         FileDatabase::set('build_' . BUILD_VERSION, 'build_time', time());
         FileDatabase::set('build_' . BUILD_VERSION, 'deploy_plan_time', strtotime(date('Y-m-d H:00:00', time() + 8 * 60 * 60)));
 
-		/* deploy code */
-		$repository = Config::get('common.product.cmd_path');
-		$gitModel = new GitModel($repository);
-		$gitModel->pull();
-		Sync::deploy();
+        /* deploy code */
+        $repository = Config::get('common.product.cmd_path');
+        $gitModel = new GitModel($repository);
+        $gitModel->pull();
+        Sync::deploy();
 
-		/* get mail content */
-		Helper::logLn(RUNTIME_LOG, 'Get mail content, includes commit, product_description, product, test info, subject, vcs and so on...');
-		$mailModel = new MailModel(MailModel::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY); 
-		$this->view->assign('data', $mailModel->getContent());
+        /* get mail content */
+        Helper::logLn(RUNTIME_LOG, 'Get mail content, includes commit, product_description, product, test info, subject, vcs and so on...');
+        $mailModel = new MailModel(MailModel::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY); 
+        $this->view->assign('data', $mailModel->getContent());
 
-		/* send mail */
-		Helper::logLn(RUNTIME_LOG, 'Sending email...');
+        /* send mail */
+        Helper::logLn(RUNTIME_LOG, 'Sending email...');
         $mailContent = $this->view->fetch('gitbuild/gray.tpl');
-		$sendMailResult = Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $mailContent, ATTACHMENT);
-		Helper::logLn(RUNTIME_LOG, 'Mail sent.');
+        $sendMailResult = Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $mailContent, ATTACHMENT);
+        Helper::logLn(RUNTIME_LOG, 'Mail sent.');
 
         /* save build infomartion */
         Helper::logLn(RUNTIME_LOG, 'Saving build info...');
@@ -72,13 +72,13 @@ class GitBuildController extends AbstractController
         /* modify the build version */
         Helper::logLn(RUNTIME_LOG, 'Modify build version...');
         FileDatabase::set('build', 'currentBuildVersion', array('build_version' => BUILD_VERSION, 'commit_version' => $gitModel->getHead()));
-	}
+    }
 
-	/**
-	 * Build to all online environment.
-	 */
-	private function buildToOnlineEnv()
-	{
+    /**
+     * Build to all online environment.
+     */
+    private function buildToOnlineEnv()
+    {
         /* Build to all online environment */
         Helper::logLn(RUNTIME_LOG, 'build to all online environment...');
         $lastStatbleBuildVersion = FileDatabase::get('build', 'lastStableBuildVersion');
@@ -112,12 +112,12 @@ class GitBuildController extends AbstractController
 
         /* send mail*/
         Helper::logLn(RUNTIME_LOG, 'Sending email...');
-		$mailModel = new MailModel($mailType); 
-		$this->view->assign('data', $mailModel->getContent());
+        $mailModel = new MailModel($mailType); 
+        $this->view->assign('data', $mailModel->getContent());
         $mailContent = $this->view->fetch('gitbuild/online.tpl');
-		$sendMailResult = Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $mailContent);
-		Helper::logLn(RUNTIME_LOG, 'Mail sent.');
-	}
+        $sendMailResult = Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $mailContent);
+        Helper::logLn(RUNTIME_LOG, 'Mail sent.');
+    }
 
     /**
      * Rollback.
