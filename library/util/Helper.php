@@ -25,10 +25,13 @@ class Helper
 	 */
 	public static function console($msg)
 	{
+        if (APP_MODE == 'WEB') {
+            return;
+        }
 		if (is_array($msg)) {
 			var_dump($msg);
 		} else {
-			echo $msg;
+            echo '[' . date('Y-m-d H:i:s', time()) . '] ' . $msg;
 		}	
 	}
 
@@ -57,7 +60,7 @@ class Helper
 		if (!is_dir($path)) {
 			mkdir(iconv("UTF-8", "GBK", $path), 0777, true); 
 		}
-		error_log($msg, 3, $filename);
+		error_log('[' . date('Y-m-d H:i:s', time()) . '] ' . $msg . "\n", 3, $filename);
 	}
 
 	/**
