@@ -55,4 +55,24 @@ class ProductModel
 	{
 		return Config::get('common.app.gray_desc');
 	}
+
+	/**
+	 * Get online successful info.
+	 *
+	 * @return string
+	 */
+	public function getOnlineSucInfo()
+	{
+		return Config::get('common.app.online_suc_desc');
+	}
+
+    /**
+     * Get online fail info.
+     *
+     * @return string
+     */
+	public function getOnlineFailInfo()
+	{
+		return Config::get('common.app.online_fail_desc');
+	}
 }
