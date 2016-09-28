@@ -51,15 +51,15 @@ class GitModel
 	 * @param $number int 
 	 * @return array
 	 */
-	public function logWithNameStatus($number = 12)
+	public function logWithNameStatus($oldCommitHash, $newCommitHash = 'HEAD')
 	{
-		$hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git log --name-status -n{$number} 2>&1");	
+		$hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git log {$oldCommitHash}..{$newCommitHash} --name-status 2>&1");	
 		$line_arr = explode("\n", $hup);
 		$result = array();
 		$length = count($line_arr);
 		$current_commit = '';
 		for ($i = 0; $i < $length; $i++) {
-			if (strpos($line_arr[$i], "commit") === 0) {
+			if (strpos($line_arr[$i], 'commit') === 0) {
 				$current_commit = trim(substr($line_arr[$i], 6));
 				$result[$current_commit]['commit'] = $current_commit;
 			} else {
@@ -137,5 +137,16 @@ class GitModel
 			$source_arr['message'] = '';
 		}
 		$source_arr['message'][] = $string;
+	}
+
+    /**
+     * Get the head commit hash.
+     *
+     * @return string
+     */
+	public function getHead()
+	{
+		$hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git rev-parse HEAD 2>&1");	
+        return trim($hup, "\n");
 	}
 }
