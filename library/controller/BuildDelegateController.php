@@ -17,49 +17,49 @@ use Library\Controller\SVNBuildController;
  */
 class BuildDelegateController
 {
-	/**
-	 * Which type is the controler verison system selected.
-	 */
-	const SVN = "Library\Controller\SVNBuildController";
-	const GIT = "Library\Controller\GitBuildController";
+    /**
+     * Which type is the controler verison system selected.
+     */
+    const SVN = "Library\Controller\SVNBuildController";
+    const GIT = "Library\Controller\GitBuildController";
 
-	/**
-	 * The build class object.
-	 *
-	 * @var object
-	 */
-	private $build = null;
+    /**
+     * The build class object.
+     *
+     * @var object
+     */
+    private $build = null;
 
-	/**
-	 * Build method.
-	 *
-	 * @param int $type the type of the vcs
-	 */
-	public function go($type = self::SVN)
-	{
-		$controllerName = $this->_getCSV($type);
-		$this->build = new $controllerName();
-		$this->build->go();
-	}
+    /**
+     * Build method.
+     *
+     * @param int $type the type of the vcs
+     */
+    public function go($type = self::SVN)
+    {
+        $controllerName = $this->_getCSV($type);
+        $this->build = new $controllerName();
+        $this->build->go();
+    }
 
-	/**
-	 * Get the csv type.
-	 *
-	 * @return int
-	 */
-	private function _getCSV($type)
-	{
-		switch ($type) {
-	    case VCS_GIT:
-			$vcs = self::GIT;	
-			break;
-		case VCS_SVN:
-			$vcs = self::SVN;	
-			break;
-		default :
-			$vcs = self::SVN;
-			break;
-		}
-		return $vcs;
-	}
+    /**
+     * Get the csv type.
+     *
+     * @return int
+     */
+    private function _getCSV($type)
+    {
+        switch ($type) {
+        case VCS_GIT:
+            $vcs = self::GIT;    
+            break;
+        case VCS_SVN:
+            $vcs = self::SVN;    
+            break;
+        default :
+            $vcs = self::SVN;
+            break;
+        }
+        return $vcs;
+    }
 }

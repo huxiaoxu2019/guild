@@ -13,12 +13,12 @@ use Library\Util\Config;
 
 class TestModel {
 
-	/**
-	 * Get info.
-	 *
-	 * @return mixed
-	 */
-	public function getInfo() {
-		return Config::get("common.test");
-	}
+    /**
+     * Get info.
+     *
+     * @return mixed
+     */
+    public function getInfo() {
+        return Config::get("common.test");
+    }
 }

@@ -39,37 +39,37 @@
                     </tr>
                   </thead>
                   <tbody>
-					{foreach from=$data.vcs item=vo}
+                    {foreach from=$data.vcs item=vo}
                     <tr>
                       <td>{$vo['commit']|substr:0:8}</td>
                       <td>
-					  {foreach from=$vo.message item=voo}
-	                      {$voo}<br />
-	                  {/foreach}
-					  </td>
+                      {foreach from=$vo.message item=voo}
+                          {$voo}<br />
+                      {/foreach}
+                      </td>
                       <td>{$vo['author']}</td>
                       <td class='break-all'>
-					  {if isset($vo['diff'])}
-					  {foreach from=$vo.diff item=voo}
-	                      {$voo}<br />
-	                  {/foreach}
-					  {else}
-					      {$vo['merge']}<br />
-					      {foreach from=$vo.merge_diff item=voo}
-	                          {$voo}<br />
-	                      {/foreach}
-					  {/if}
-					  </td>
+                      {if isset($vo['diff'])}
+                      {foreach from=$vo.diff item=voo}
+                          {$voo}<br />
+                      {/foreach}
+                      {else}
+                          {$vo['merge']}<br />
+                          {foreach from=$vo.merge_diff item=voo}
+                              {$voo}<br />
+                          {/foreach}
+                      {/if}
+                      </td>
                       <td>{$vo['date']|date_format:"%Y-%m-%d %H:%M:%S"}</td>
                     </tr>
-		            {/foreach}
+                    {/foreach}
                   </tbody>
                 </table>
         </div><!-- /.blog-main -->
 
         <div class="col-sm-12 blog-main">
             <h4 class="blog-post-title">内网集成测试环境</h4>
-			{$data.test}
+            {$data.test}
         </div><!-- /.blog-main -->
 
         <div class="col-sm-12 blog-main">

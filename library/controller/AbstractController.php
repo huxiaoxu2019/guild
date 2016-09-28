@@ -11,33 +11,33 @@ namespace Library\Controller;
 
 abstract class AbstractController 
 {
-	/**
-	 * Smarty engine object.
-	 *
-	 * @var object
-	 */
-	protected $view = null;
+    /**
+     * Smarty engine object.
+     *
+     * @var object
+     */
+    protected $view = null;
 
-	/**
+    /**
      * Constructor.
      *
      * @TODO seprate the web and cli mode.
-	 */
-	public function __construct()
-	{
+     */
+    public function __construct()
+    {
         /* Smarty */
-		$this->view = new \Smarty();
-		$this->view->caching = false;
-		$this->view->template_dir = SMARTY_TEMPLATE_DIR;
-		$this->view->compile_dir = SMARTY_COMPILE_DIR;
+        $this->view = new \Smarty();
+        $this->view->caching = false;
+        $this->view->template_dir = SMARTY_TEMPLATE_DIR;
+        $this->view->compile_dir = SMARTY_COMPILE_DIR;
 
-		/* WEB */
-		if (APP_MODE == 'WEB') {
+        /* WEB */
+        if (APP_MODE == 'WEB') {
             /* valid action name */
-			$actionName = ACTION_NAME;
-			if (!method_exists($this, ACTION_NAME)) {
-				die('Unknown page.');
-			}
+            $actionName = ACTION_NAME;
+            if (!method_exists($this, ACTION_NAME)) {
+                die('Unknown page.');
+            }
 
             /* valid some constants */
             if (!check_app_version() || !check_build_version()) {
@@ -47,7 +47,7 @@ abstract class AbstractController
             /* call method */
             $this->$actionName();
         }
-	}
+    }
 
     /**
      * Redirect.

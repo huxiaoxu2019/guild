@@ -12,15 +12,15 @@ namespace Library\Util;
 class PHP
 {
 
-	/**
-	 * Check the php file.
-	 *
-	 * @param $file string
-	 * @return string
-	 */
-	public function check($file) {
-		$cmd = "/usr/local/bin/php -l {$file}";
-		$output = shell_exec($cmd);
-		return  $output;
-	}
+    /**
+     * Check the php file.
+     *
+     * @param $file string
+     * @return string
+     */
+    public function check($file) {
+        $cmd = "/usr/local/bin/php -l {$file}";
+        $output = shell_exec($cmd);
+        return  $output;
+    }
 }

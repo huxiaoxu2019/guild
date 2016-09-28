@@ -11,11 +11,11 @@ namespace Library\Controller;
 
 class SVNBuildController extends AbstractController
 {
-	/**
-	 * Build.
-	 */
-	public function go()
-	{
-		Helper::logLn(RUNTIME_LOG, "Building from svn controller...");
-	}
+    /**
+     * Build.
+     */
+    public function go()
+    {
+        Helper::logLn(RUNTIME_LOG, "Building from svn controller...");
+    }
 }

@@ -17,27 +17,27 @@ $allfiles = array();
  */
 function read_dir_all($dir)
 {
-	global $allfiles;
-	$ret = array(
-		'dirs' => array(),
-		'files' => array()
-	);
-	$handle = null;
-	if ($handle = opendir($dir)) {
-		while (false !== ($file = readdir($handle))) {
-			if ($file != '.' && $file !== '..') {
-				$cur_path = $dir . DIRECTORY_SEPARATOR . $file; 
-				if (is_dir($cur_path)) {
-					$ret['dirs'][$cur_path] = read_dir_all($cur_path);
-				} else {
-					$ret['files'][] = $cur_path;
-					$allfiles[] = $cur_path;
-				}
-			}
-		}
-		closedir($handle);
-	}
-	return $ret;
+    global $allfiles;
+    $ret = array(
+        'dirs' => array(),
+        'files' => array()
+    );
+    $handle = null;
+    if ($handle = opendir($dir)) {
+        while (false !== ($file = readdir($handle))) {
+            if ($file != '.' && $file !== '..') {
+                $cur_path = $dir . DIRECTORY_SEPARATOR . $file; 
+                if (is_dir($cur_path)) {
+                    $ret['dirs'][$cur_path] = read_dir_all($cur_path);
+                } else {
+                    $ret['files'][] = $cur_path;
+                    $allfiles[] = $cur_path;
+                }
+            }
+        }
+        closedir($handle);
+    }
+    return $ret;
 }
 
 /**

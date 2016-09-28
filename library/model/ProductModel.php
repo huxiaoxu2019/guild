@@ -13,66 +13,66 @@ use Library\Util\Config;
 
 class ProductModel
 {
-	/**
-	 * Get info.
-	 *
-	 * @return mixed
-	 */
-	public function getInfo()
-	{
-		$result = Config::get("common.product");
-		switch (VCS) 
-		{
-		case VCS_GIT :
-			$result['vcs_url'] = $result['git_url'];
-			break;
-		case VCS_SVN :
-			$result['vcs_url'] = $result['svn_url'];
-			break;
-		default :
-			$result['vcs_url'] = $result['svn_url'];
-			break;
-		}
-		return $result;
-	}
+    /**
+     * Get info.
+     *
+     * @return mixed
+     */
+    public function getInfo()
+    {
+        $result = Config::get("common.product");
+        switch (VCS) 
+        {
+        case VCS_GIT :
+            $result['vcs_url'] = $result['git_url'];
+            break;
+        case VCS_SVN :
+            $result['vcs_url'] = $result['svn_url'];
+            break;
+        default :
+            $result['vcs_url'] = $result['svn_url'];
+            break;
+        }
+        return $result;
+    }
 
-	/**
-	 * Get info.
-	 *
-	 * @return string
-	 */
-	public function getDescriptionInfo()
-	{
-		return Config::get("common.app.desc");
-	}
+    /**
+     * Get info.
+     *
+     * @return string
+     */
+    public function getDescriptionInfo()
+    {
+        return Config::get("common.app.desc");
+    }
 
-	/**
-	 * Get gray info.
-	 *
-	 * @return string
-	 */
-	public function getGrayInfo()
-	{
-		return Config::get('common.app.gray_desc');
-	}
+    /**
+     * Get gray info.
+     *
+     * @return string
+     */
+    public function getGrayInfo()
+    {
+        return Config::get('common.app.gray_desc');
+    }
 
-	/**
-	 * Get online successful info.
-	 *
-	 * @return string
-	 */
-	public function getOnlineSucInfo()
-	{
-		return Config::get('common.app.online_suc_desc');
-	}
+    /**
+     * Get online successful info.
+     *
+     * @return string
+     */
+    public function getOnlineSucInfo()
+    {
+        return Config::get('common.app.online_suc_desc');
+    }
 
     /**
      * Get online fail info.
      *
      * @return string
      */
-	public function getOnlineFailInfo()
-	{
-		return Config::get('common.app.online_fail_desc');
-	}
+    public function getOnlineFailInfo()
+    {
+        return Config::get('common.app.online_fail_desc');
+    }
 }

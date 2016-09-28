@@ -17,7 +17,7 @@ class BuildConsoleController extends AbstractController
     /**
      * Push to online enviroment.
      */
-	public function pushToOnline() {
+    public function pushToOnline() {
         /* get html data */
         $data = array();
         $data['mail_content'] = FileDatabase::get('build_' . BUILD_VERSION, 'mail_content');
@@ -38,8 +38,8 @@ class BuildConsoleController extends AbstractController
 
         /* assign and display */
         $this->view->assign('data', $data);
-		$this->view->display('buildconsole/push_to_online.tpl');
-	}
+        $this->view->display('buildconsole/push_to_online.tpl');
+    }
 
     /*
      * Set the status of build.

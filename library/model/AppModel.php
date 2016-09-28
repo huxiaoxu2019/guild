@@ -13,13 +13,13 @@ use Library\Util\Config;
 
 class AppModel
 {
-	/**
-	 * Get info.
-	 *
-	 * @return mixed
-	 */
-	public function getInfo()
-	{
-		return Config::get("common.app");
-	}
+    /**
+     * Get info.
+     *
+     * @return mixed
+     */
+    public function getInfo()
+    {
+        return Config::get("common.app");
+    }
 }

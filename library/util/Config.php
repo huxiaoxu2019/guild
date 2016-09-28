@@ -10,39 +10,39 @@
 namespace Library\Util;
 
 class Config
-{	
-	/**
-	 * The cache for config variable.
-	 *
-	 * @var array
-	 */
-	private static $_config = array();
+{    
+    /**
+     * The cache for config variable.
+     *
+     * @var array
+     */
+    private static $_config = array();
 
-	/**
-	 * Get config value.
-	 *
-	 * @param $path string
-	 * @return mixed
-	 */
-	public static function get($path)
-	{
-		if (!isset(self::$_config[$path])) {
-			$arr    = explode('.', $path);
-			$conf   = parse_ini_file(APP_PATH . '/config/' . APP_VERSION . '/' . $arr[0] . '.ini', true);
-			$length = count($arr);
-			for ($i = 1; $i < $length; $i++) {
-				if (isset($conf[$arr[$i]])) {
-					$conf = $conf[$arr[$i]];
-				} else {
-					$conf = null;
-					break;
-				}
-			}
-			if (!isset($conf) || is_null($conf)) {
-				throw new \Exception("The config key to read is invalid. path:" . var_export($path, true));
-			}
-			self::$_config[$path] =  $conf;
-		}
-		return self::$_config[$path];
-	}
+    /**
+     * Get config value.
+     *
+     * @param $path string
+     * @return mixed
+     */
+    public static function get($path)
+    {
+        if (!isset(self::$_config[$path])) {
+            $arr    = explode('.', $path);
+            $conf   = parse_ini_file(APP_PATH . '/config/' . APP_VERSION . '/' . $arr[0] . '.ini', true);
+            $length = count($arr);
+            for ($i = 1; $i < $length; $i++) {
+                if (isset($conf[$arr[$i]])) {
+                    $conf = $conf[$arr[$i]];
+                } else {
+                    $conf = null;
+                    break;
+                }
+            }
+            if (!isset($conf) || is_null($conf)) {
+                throw new \Exception("The config key to read is invalid. path:" . var_export($path, true));
+            }
+            self::$_config[$path] =  $conf;
+        }
+        return self::$_config[$path];
+    }
 }

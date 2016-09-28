@@ -16,28 +16,28 @@ use Library\Util\Helper;
 
 class Sync
 {
-	/**
-	 * Deploy.
-	 */
-	public static function deploy() {
-		$cmdPath  = Config::get('common.product.cmd_path');
-		$passwd  = Config::get('common.build.sync_passwd');
-		$syncModule = Config::get("common.build.sync_module");
+    /**
+     * Deploy.
+     */
+    public static function deploy() {
+        $cmdPath  = Config::get('common.product.cmd_path');
+        $passwd  = Config::get('common.build.sync_passwd');
+        $syncModule = Config::get("common.build.sync_module");
 
-		Helper::logLn(RUNTIME_LOG, "Pulling the last source code to server from the local cmd_path {$cmdPath}...");
-		Helper::logLn(RUNTIME_LOG, "Deploying the project to the server(s)...");
-		$ryncCmd  = "/usr/bin/rsync -vzrtopg --exclude-from '" . APP_PATH . "/config/rsync_exclude_list' --password-file={$passwd}  --delete --progress {$cmdPath}/ root@10.210.237.31::{$syncModule}";
+        Helper::logLn(RUNTIME_LOG, "Pulling the last source code to server from the local cmd_path {$cmdPath}...");
+        Helper::logLn(RUNTIME_LOG, "Deploying the project to the server(s)...");
+        $ryncCmd  = "/usr/bin/rsync -vzrtopg --exclude-from '" . APP_PATH . "/config/rsync_exclude_list' --password-file={$passwd}  --delete --progress {$cmdPath}/ root@10.210.237.31::{$syncModule}";
 
-		Helper::logLn(RUNTIME_LOG, "rsync:{$ryncCmd}");
-		$output = <<<DEPLOY
+        Helper::logLn(RUNTIME_LOG, "rsync:{$ryncCmd}");
+        $output = <<<DEPLOY
 ===================================================================
                              DEPLOY
 ===================================================================\n
 DEPLOY;
-		$output .= shell_exec($ryncCmd);
-		$filepath = ATTACHMENT;
-		$file = fopen($filepath, "a+");    
-		fwrite($file, $output);
-		fclose($file);
-	}
+        $output .= shell_exec($ryncCmd);
+        $filepath = ATTACHMENT;
+        $file = fopen($filepath, "a+");    
+        fwrite($file, $output);
+        fclose($file);
+    }
 }

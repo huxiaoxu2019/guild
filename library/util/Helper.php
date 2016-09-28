@@ -11,80 +11,80 @@ namespace Library\Util;
 
 class Helper
 {
-	/**
-	 * Constant.
-	 */
-	const BUILD_SUC = 'successfully';
-	const BUILD_FAI = 'fail';
-	
-	/**
-	 * Throw messages to the terminal.
-	 *
-	 * @deprecated
-	 * @param $msg mixed
-	 */
-	public static function console($msg)
-	{
+    /**
+     * Constant.
+     */
+    const BUILD_SUC = 'successfully';
+    const BUILD_FAI = 'fail';
+    
+    /**
+     * Throw messages to the terminal.
+     *
+     * @deprecated
+     * @param $msg mixed
+     */
+    public static function console($msg)
+    {
         if (APP_MODE == 'WEB') {
             return;
         }
-		if (is_array($msg)) {
-			var_dump($msg);
-		} else {
+        if (is_array($msg)) {
+            var_dump($msg);
+        } else {
             echo '[' . date('Y-m-d H:i:s', time()) . '] ' . $msg;
-		}	
-	}
+        }    
+    }
 
-	/**
-	 * Throw messages to the terminal in line.
-	 *
-	 * @deprecated
-	 * @param $msg mixed
-	 */
-	public static function consoleLn($msg) {
-		if (!is_array($msg)) {
-			$msg .= "\n";
-		}
-		self::console($msg);
-	}
-	
-	/**
-	 * Log.
-	 *
-	 * @param $filename string
-	 * @param $msg string
-	 */
-	public static function logLn($filename, $msg) {
-		self::consoleLn($msg);
-		$path = dirname($filename);
-		if (!is_dir($path)) {
-			mkdir(iconv("UTF-8", "GBK", $path), 0777, true); 
-		}
-		error_log('[' . date('Y-m-d H:i:s', time()) . '] ' . $msg . "\n", 3, $filename);
-	}
+    /**
+     * Throw messages to the terminal in line.
+     *
+     * @deprecated
+     * @param $msg mixed
+     */
+    public static function consoleLn($msg) {
+        if (!is_array($msg)) {
+            $msg .= "\n";
+        }
+        self::console($msg);
+    }
+    
+    /**
+     * Log.
+     *
+     * @param $filename string
+     * @param $msg string
+     */
+    public static function logLn($filename, $msg) {
+        self::consoleLn($msg);
+        $path = dirname($filename);
+        if (!is_dir($path)) {
+            mkdir(iconv("UTF-8", "GBK", $path), 0777, true); 
+        }
+        error_log('[' . date('Y-m-d H:i:s', time()) . '] ' . $msg . "\n", 3, $filename);
+    }
 
-	/**
-	 * Set build result to the disk.
-	 *
-	 * @param $msg string
-	 */
-	public static function setBuildResult($msg = self::BUILD_SUC) {
-		$buildResult =  Config::get("common.build.build_result");
-		$fp = fopen($buildResult, "w");
-		fwrite($fp, $msg);
-		fclose($fp);
-	}
+    /**
+     * Set build result to the disk.
+     *
+     * @param $msg string
+     */
+    public static function setBuildResult($msg = self::BUILD_SUC) {
+        $buildResult =  Config::get("common.build.build_result");
+        $fp = fopen($buildResult, "w");
+        fwrite($fp, $msg);
+        fclose($fp);
+    }
 
-	/**
-	 * Weather or not the current environment is debug mode.
-	 *
-	 * @return bool
-	 */
-	public static function isDebug() 
-	{
-		if (DEBUG !== 'true') {
-			return false;
-		}
-		return true;
-	}
+    /**
+     * Weather or not the current environment is debug mode.
+     *
+     * @return bool
+     */
+    public static function isDebug() 
+    {
+        if (DEBUG !== 'true') {
+            return false;
+        }
+        return true;
+    }
 }
