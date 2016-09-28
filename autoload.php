@@ -21,7 +21,7 @@ if (!defined("APP_PATH")) {
 	die("no right to access the script.");
 }
 
-// 自动加载类库.
+/* 自动加载类库 */
 if (PHP_VERSION >= '5.3.0') {
 	spl_autoload_register(function ($class) {
 		$pathArr = explode("\\", $class);
@@ -33,13 +33,17 @@ if (PHP_VERSION >= '5.3.0') {
 		$file    = $path . DIRECTORY_SEPARATOR . $pathArr[$length - 1] . ".php"; 
 		if (file_exists($file)) {
 			require_once $file;
+		} else {
+			if (APP_MODE == 'WEB') {
+				die('Unknown page.');
+			}
 		}
 	});
 } else {
 	die("PHP版本小于5.3.0");
 }
 
-// 自动加载函数库.
+/* 自动加载函数库 */
 $funcFile = APP_PATH . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'function' . DIRECTORY_SEPARATOR . 'common.php';
 if (file_exists($funcFile)) {
 	require_once $funcFile;
