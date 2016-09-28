@@ -19,7 +19,6 @@ use Library\Util\Config;
 
 class MailModel
 {
-
 	/**
 	 * Some constants.
 	 */
@@ -72,6 +71,9 @@ class MailModel
 		/* Get Product Description */
 		$content['product_description'] = $this->getProductDescriptionInfo();	
 
+        /* Get build description */
+        $content['build_description'] = $this->getBuildDescription();
+
 		/* Get VCS info */
 		if (VCS == VCS_GIT) {
 			$content['vcs'] = $this->getGitInfo();
@@ -115,6 +117,7 @@ class MailModel
 	/*
 	 * Get mail subject.
 	 *
+     * @TODO abstract optimization
 	 * @return string
 	 */
 	public function getSubject() {
@@ -124,22 +127,27 @@ class MailModel
 			{
 			case self::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY :
 				$title = Config::get("common.app.suc_title");
-				break;
-			case self::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED :
-				$title = Config::get("common.app.fai_title");
-				break;
-			case self::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY :
-				$title = Config::get("common.app.suc_title");
-				break;
-			case self::TYPE_DEPLOY_TO_GRAY_LEVEL_FAILED :
-				$title = Config::get("common.app.fai_title");
-				break;
-			default :
-				$title = Config::get("common.app.fai_title");
-				break;
-			}
-			$build = '.' . date("ymd", time()) . '01';
-			$this->subject = sprintf($title, $build, '');
+                $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
+                $this->subject = sprintf($title, 'Online ' . $currentBuildVersion['build_version']);
+                break;
+            case self::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED :
+                $title = Config::get("common.app.fai_title");
+                $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
+                $this->subject = sprintf($title, 'Online ' . $currentBuildVersion['build_version']);
+                break;
+            case self::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY :
+                $title = Config::get("common.app.suc_title");
+                $this->subject = sprintf($title, 'Gray level ' . BUILD_VERSION);
+                break;
+            case self::TYPE_DEPLOY_TO_GRAY_LEVEL_FAILED :
+                $title = Config::get("common.app.fai_title");
+                $this->subject = sprintf($title, 'Gray level ' . BUILD_VERSION);
+                break;
+            default :
+                $title = Config::get("common.app.fai_title");
+                $this->subject = sprintf($title, BUILD_VERSION);
+                break;
+            }
 		}
 		return $this->subject;
 	}
@@ -164,12 +172,13 @@ class MailModel
 	{
 		/* db */
 		$fileDatabase = new FileDatabase();
-		$lastCommitHash = $fileDatabase->get(FileDatabase::FILENAME_GIT, 'lastVersion');
+        $lastStatbleBuildVersion = FileDatabase::get('build', 'lastStableBuildVersion');
+        $lastCommitHash = $lastStatbleBuildVersion['commit_version'];
 
 		/* git model */
 		$repository = Config::get("common.product.cmd_path");
 		$gitModel = new GitModel($repository);
-	    $result = $gitModel->logWithNameStatus();		
+	    $result = $gitModel->logWithNameStatus($lastCommitHash);		
 		
 		/* return */
 		return $result;
@@ -200,24 +209,49 @@ class MailModel
 	private function getProductDescriptionInfo()
    	{
 		$productModel = new ProductModel();	
-		$info = $productModel->getDescriptionInfo();
+		return $productModel->getDescriptionInfo();
+	}
+
+    /**
+     * Get build description.
+     *
+     * @TODO abstract optimization
+     *
+     * @return string
+     */
+    private function getBuildDescription() {
+		$productModel = new ProductModel();	
+        $info = '';
 		switch ($this->deployType)
 		{
 		case self::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY:
-			break;
+            $info = $productModel->getOnlineSucInfo();
+            $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
+            $info = sprintf($info, $currentBuildVersion['build_version']);
 		case self::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED:
+            $info = $productModel->getOnlineFailInfo();
+            $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
+            $info = sprintf($info, $currentBuildVersion['build_version']);
 			break;
 		case self::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY:
-			$info .= '<br />' . $productModel->getGrayInfo();
-			break;
-		case self::TYPE_DEPLOY_TO_GRAY_LEVEL_FAILED:
-			$info .= '<br />' . $productModel->getGrayInfo();
+			$info = $productModel->getGrayInfo();
+            $plan_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:00:00', time())) + 8 * 60 * 60);
+            $params = array('version' => APP_VERSION, 'build_version' => BUILD_VERSION);
+            $build_console_url = 'http://guild.com/BuildConsole/pushToOnline?' . http_build_query($params);
+            $build_console_url = "<a href='{$build_console_url}'>{$build_console_url}</a>";
+            $info = sprintf($info, $plan_time, $build_console_url);
+            break;
+        case self::TYPE_DEPLOY_TO_GRAY_LEVEL_FAILED:
+            $info = $productModel->getGrayInfo();
+            $plan_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:00:00', time())) + 8 * 60 * 60);
+            $params = array('version' => APP_VERSION, 'build_version' => BUILD_VERSION);
+            $build_console_url = 'http://guild.com/BuildConsole/pushToOnline?' . http_build_query($params);
+            $build_console_url = "<a href='{$build_console_url}'>{$build_console_url}</a>";
+            $info = sprintf($info, $plan_time, $build_console_url);
 			break;
 		default:
 			break;
 		}
-		$plan_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:00:00', time())) + 4 * 60 * 60);
-		$info = sprintf($info, $plan_time);
 		return $info;
-	}
+    }
 }
