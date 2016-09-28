@@ -19,114 +19,114 @@ use Library\Util\Config;
 
 class MailModel
 {
-	/**
-	 * Some constants.
-	 */
-	const TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY = 1;
-	const TYPE_DEPLOY_TO_ALL_ONLINE_FAILED       = 2;
-	const TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY = 3;
-	const TYPE_DEPLOY_TO_GRAY_LEVEL_FAILED       = 4;
+    /**
+     * Some constants.
+     */
+    const TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY = 1;
+    const TYPE_DEPLOY_TO_ALL_ONLINE_FAILED       = 2;
+    const TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY = 3;
+    const TYPE_DEPLOY_TO_GRAY_LEVEL_FAILED       = 4;
 
-	/**
-	 * Deploty type.
-	 *
-	 * @var int
-	 */
-	private $deployType = 0;
+    /**
+     * Deploty type.
+     *
+     * @var int
+     */
+    private $deployType = 0;
 
-	/*
-	 * Mail subject.
-	 *
-	 * @var string
-	 */
-	private $subject = '';
+    /*
+     * Mail subject.
+     *
+     * @var string
+     */
+    private $subject = '';
 
-	/**
-	 * Constructor.
-	 *
-	 * @param int $deployType
-	 */
-	public function __construct($deployType = self::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY) 
-	{
-		Helper::logLn(RUNTIME_LOG, "MailModel...");
+    /**
+     * Constructor.
+     *
+     * @param int $deployType
+     */
+    public function __construct($deployType = self::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY) 
+    {
+        Helper::logLn(RUNTIME_LOG, "MailModel...");
 
-		$this->deployType = $deployType;
-	}
+        $this->deployType = $deployType;
+    }
 
-	/**
-	 * Get mail content field.
-	 *
-	 * @param return string
-	 */
-	public function getContent() 
-	{
-		/* define */
-		$content = array(
-			'commit' => '',
-			'product_description' => '', 
-			'product' => array(),
-			'test' => '',
-			'subject' => '',
-			'vcs' => array());
-		/* Get Product Description */
-		$content['product_description'] = $this->getProductDescriptionInfo();	
+    /**
+     * Get mail content field.
+     *
+     * @param return string
+     */
+    public function getContent() 
+    {
+        /* define */
+        $content = array(
+            'commit' => '',
+            'product_description' => '', 
+            'product' => array(),
+            'test' => '',
+            'subject' => '',
+            'vcs' => array());
+        /* Get Product Description */
+        $content['product_description'] = $this->getProductDescriptionInfo();    
 
         /* Get build description */
         $content['build_description'] = $this->getBuildDescription();
 
-		/* Get VCS info */
-		if (VCS == VCS_GIT) {
-			$content['vcs'] = $this->getGitInfo();
-		} else {
-			$content['vcs'] = $this->getSVNInfo();
-		}
+        /* Get VCS info */
+        if (VCS == VCS_GIT) {
+            $content['vcs'] = $this->getGitInfo();
+        } else {
+            $content['vcs'] = $this->getSVNInfo();
+        }
 
-		/* product */
-		$content['product'] = $this->getProductInfo();
+        /* product */
+        $content['product'] = $this->getProductInfo();
 
-		/* test */
-		$content['test'] = $this->getTestInfo();
+        /* test */
+        $content['test'] = $this->getTestInfo();
 
-		/* subject */
-		$content['subject'] = $this->getSubject();
+        /* subject */
+        $content['subject'] = $this->getSubject();
 
-		/* return */
-		return $content;
-	}
+        /* return */
+        return $content;
+    }
 
-	/**
-	 * Get email address(to).
-	 *
-	 * @return string
-	 */
-	public function getTo() 
-	{
-		return Config::get('mail.receiver.to');
-	}
+    /**
+     * Get email address(to).
+     *
+     * @return string
+     */
+    public function getTo() 
+    {
+        return Config::get('mail.receiver.to');
+    }
 
-	/**
-	 * Get email address(cc).
-	 *
-	 * @return string
-	 */
-	public function getCc() 
-	{
-		return Config::get('mail.receiver.cc');
-	}
+    /**
+     * Get email address(cc).
+     *
+     * @return string
+     */
+    public function getCc() 
+    {
+        return Config::get('mail.receiver.cc');
+    }
 
-	/*
-	 * Get mail subject.
-	 *
+    /*
+     * Get mail subject.
+     *
      * @TODO abstract optimization
-	 * @return string
-	 */
-	public function getSubject() {
-		if (!$this->subject)
-		{
-			switch ($this->deployType)
-			{
-			case self::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY :
-				$title = Config::get("common.app.suc_title");
+     * @return string
+     */
+    public function getSubject() {
+        if (!$this->subject)
+        {
+            switch ($this->deployType)
+            {
+            case self::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY :
+                $title = Config::get("common.app.suc_title");
                 $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
                 $this->subject = sprintf($title, 'Online ' . $currentBuildVersion['build_version']);
                 break;
@@ -148,69 +148,69 @@ class MailModel
                 $this->subject = sprintf($title, BUILD_VERSION);
                 break;
             }
-		}
-		return $this->subject;
-	}
+        }
+        return $this->subject;
+    }
 
-	/**
-	 * Get product info.
-	 *
-	 * @param return mixed
-	 */
-	private function getProductInfo() 
-	{
-		$productModel = new ProductModel();	
-		return $productModel->getInfo();
-	}
+    /**
+     * Get product info.
+     *
+     * @param return mixed
+     */
+    private function getProductInfo() 
+    {
+        $productModel = new ProductModel();    
+        return $productModel->getInfo();
+    }
 
-	/**
-	 * Get git commit and diff information.
-	 *
-	 * @param return array
-	 */
-	private function getGitInfo() 
-	{
-		/* db */
-		$fileDatabase = new FileDatabase();
+    /**
+     * Get git commit and diff information.
+     *
+     * @param return array
+     */
+    private function getGitInfo() 
+    {
+        /* db */
+        $fileDatabase = new FileDatabase();
         $lastStatbleBuildVersion = FileDatabase::get('build', 'lastStableBuildVersion');
         $lastCommitHash = $lastStatbleBuildVersion['commit_version'];
 
-		/* git model */
-		$repository = Config::get("common.product.cmd_path");
-		$gitModel = new GitModel($repository);
-	    $result = $gitModel->logWithNameStatus($lastCommitHash);		
-		
-		/* return */
-		return $result;
-	}
+        /* git model */
+        $repository = Config::get("common.product.cmd_path");
+        $gitModel = new GitModel($repository);
+        $result = $gitModel->logWithNameStatus($lastCommitHash);        
 
-	/**
-	 * Get SVN info.
-	 *
-	 * @return array
-	 */
-	private function getSVNInfo() {}
+        /* return */
+        return $result;
+    }
 
-	/**
-	 * Get test info.
-	 *
-	 * @return string
-	 */
-	private function getTestInfo() 
-	{
-		return Config::get('common.test.desc');
-	}
+    /**
+     * Get SVN info.
+     *
+     * @return array
+     */
+    private function getSVNInfo() {}
 
-	/**
-	 * Get product description info.
-	 *
-	 * @param return string
-	 */
-	private function getProductDescriptionInfo()
-   	{
-		$productModel = new ProductModel();	
-		return $productModel->getDescriptionInfo();
-	}
+        /**
+         * Get test info.
+         *
+         * @return string
+         */
+        private function getTestInfo() 
+        {
+            return Config::get('common.test.desc');
+        }
+
+    /**
+     * Get product description info.
+     *
+     * @param return string
+     */
+    private function getProductDescriptionInfo()
+    {
+        $productModel = new ProductModel();    
+        return $productModel->getDescriptionInfo();
+    }
 
     /**
      * Get build description.
@@ -220,21 +220,21 @@ class MailModel
      * @return string
      */
     private function getBuildDescription() {
-		$productModel = new ProductModel();	
+        $productModel = new ProductModel();    
         $info = '';
-		switch ($this->deployType)
-		{
-		case self::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY:
+        switch ($this->deployType)
+        {
+        case self::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY:
             $info = $productModel->getOnlineSucInfo();
             $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
             $info = sprintf($info, $currentBuildVersion['build_version']);
-		case self::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED:
+        case self::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED:
             $info = $productModel->getOnlineFailInfo();
             $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
             $info = sprintf($info, $currentBuildVersion['build_version']);
-			break;
-		case self::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY:
-			$info = $productModel->getGrayInfo();
+            break;
+        case self::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY:
+            $info = $productModel->getGrayInfo();
             $plan_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:00:00', time())) + 8 * 60 * 60);
             $params = array('version' => APP_VERSION, 'build_version' => BUILD_VERSION);
             $build_console_url = 'http://guild.com/BuildConsole/pushToOnline?' . http_build_query($params);
@@ -248,10 +248,10 @@ class MailModel
             $build_console_url = 'http://guild.com/BuildConsole/pushToOnline?' . http_build_query($params);
             $build_console_url = "<a href='{$build_console_url}'>{$build_console_url}</a>";
             $info = sprintf($info, $plan_time, $build_console_url);
-			break;
-		default:
-			break;
-		}
-		return $info;
+            break;
+        default:
+            break;
+        }
+        return $info;
     }
 }
