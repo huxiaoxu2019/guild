@@ -19,7 +19,9 @@ abstract class AbstractController
 	protected $view = null;
 
 	/**
-	 * Constructor
+     * Constructor.
+     *
+     * @TODO seprate the web and cli mode.
 	 */
 	public function __construct()
 	{
