@@ -235,7 +235,8 @@ class MailModel
             break;
         case self::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY:
             $info = $productModel->getGrayInfo();
-            $plan_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:00:00', time())) + 6 * 60 * 60);
+            $hours = Config::get("common.build.deploy_hours");
+            $plan_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:00:00', time())) + $hours * 60 * 60);
             $params = array('version' => APP_VERSION, 'build_version' => BUILD_VERSION);
             $build_console_url = 'http://guild.com/BuildConsole/pushToOnline?' . http_build_query($params);
             $build_console_url = "<a href='{$build_console_url}'>{$build_console_url}</a>";
@@ -243,7 +244,8 @@ class MailModel
             break;
         case self::TYPE_DEPLOY_TO_GRAY_LEVEL_FAILED:
             $info = $productModel->getGrayInfo();
-            $plan_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:00:00', time())) + 6 * 60 * 60);
+            $hours = Config::get("common.build.deploy_hours");
+            $plan_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:00:00', time())) + $hours * 60 * 60);
             $params = array('version' => APP_VERSION, 'build_version' => BUILD_VERSION);
             $build_console_url = 'http://guild.com/BuildConsole/pushToOnline?' . http_build_query($params);
             $build_console_url = "<a href='{$build_console_url}'>{$build_console_url}</a>";

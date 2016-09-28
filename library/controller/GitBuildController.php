@@ -44,7 +44,8 @@ class GitBuildController extends AbstractController
 
         /* some build info */
         FileDatabase::set('build_' . BUILD_VERSION, 'build_time', time());
-        FileDatabase::set('build_' . BUILD_VERSION, 'deploy_plan_time', strtotime(date('Y-m-d H:00:00', time() + 8 * 60 * 60)));
+        $hours = Config::get("common.build.deploy_hours");
+        FileDatabase::set('build_' . BUILD_VERSION, 'deploy_plan_time', strtotime(date('Y-m-d H:00:00', time() + $hours * 60 * 60)));
 
         /* deploy code */
         $repository = Config::get('common.product.cmd_path');
