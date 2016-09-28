@@ -13,11 +13,10 @@ use Library\Util\FileDatabase;
 
 class FileDatabase
 {	
-
 	/**
 	 * The max db file size(bytes).
 	 */
-	const MAX_DB_BYTES = 1024;
+	const MAX_DB_BYTES = 1024000;
 
 	/**
 	 * The filename constant.
@@ -34,16 +33,23 @@ class FileDatabase
 	 */
 	public static function get($filename, $key = '') 
 	{
+        Helper::logLn(RUNTIME_LOG, "file database get filename:{$filename} key:{$key}...");
 		$filepath = self::getFilePath($filename);
 		$result = array();
 		if ($filepath) {
-			$fileHandle = fopen($filepath, 'r');
-			$fileContent = fread($fileHandle, filesize($filepath));
+            $filesize = filesize($filepath);
+            if (!$filesize) {
+                Helper::logLn(RUNTIME_LOG, 'file size is 0, return array()');
+                return array();
+            } else {
+                $fileHandle = fopen($filepath, 'r');
+                $fileContent = fread($fileHandle, $filesize);
+            }
 			$result = json_decode($fileContent, true) ? json_decode($fileContent, true) : $fileContent;
 			fclose($fileHandle);
 		}
 		if ($key) {
-			return isset($result[$key]) ? $result[$key] : array();
+			return isset($result[$key]) ? $result[$key] : '';
 		} else {
 			return $result;
 		}
@@ -65,7 +71,7 @@ class FileDatabase
 			$originalValue[$key] = $value;
 			$originalValue = json_encode($originalValue);
 			if (strlen($originalValue) > self::MAX_DB_BYTES) {
-				throw new \Exception("The value is more than 1024 bytes.");
+				throw new \Exception("The value is more than " . MAX_DB_BYTES . " bytes.");
 			}
 			$fileHandle = fopen($filepath, 'w');
 			fwrite($fileHandle, $originalValue);
@@ -84,10 +90,27 @@ class FileDatabase
 	private static function getFilePath($filename) 
 	{
 		$filename = APP_PATH . '/db/' . APP_VERSION . '/' . $filename;
-		if (file_exists($filename)) {
-			return $filename;
-		} else {
-			return "";
+		if (!file_exists($filename)) {
+            $fileHandle = fopen($filename, 'w');
+            if (!$fileHandle) {
+                return '';
+            }
+            fclose($fileHandle);
+            if (!chmod($filename, 0777)) {
+                die('unable to chmod.');
+            }
 		}
+        return $filename;
 	}
+
+    /**
+     * Get file content.
+     *
+     * @param $filename string
+     * @return string
+     */
+    public static function getFileContent($filename)
+    {
+        return file_get_contents($filename); 
+    }
 }
