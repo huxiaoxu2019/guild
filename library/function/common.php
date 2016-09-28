@@ -39,3 +39,38 @@ function read_dir_all($dir)
 	}
 	return $ret;
 }
+
+/**
+ * Check app version constant.
+ *
+ * @param bool
+ */
+function check_app_version() 
+{
+    if (!defined('APP_VERSION')) {
+        return false;
+    }
+    if (!file_exists(APP_PATH . '/config/' . APP_VERSION)) {
+        return false;
+    }
+    if (!file_exists(APP_PATH . '/db/' . APP_VERSION)) {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Check build version constant.
+ *
+ * @return bool
+ */
+function check_build_version() 
+{
+    if (!defined('BUILD_VERSION')) {
+        return false;
+    }
+    if (!file_exists(APP_PATH . '/db/' . APP_VERSION . '/build_' . BUILD_VERSION)) {
+        return false;
+    }
+    return true;
+}
