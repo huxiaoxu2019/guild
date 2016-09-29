@@ -59,6 +59,9 @@ class Helper
         $path = dirname($filename);
         if (!is_dir($path)) {
             mkdir(iconv("UTF-8", "GBK", $path), 0777, true); 
+            if (!chmod($path, 0777)) {
+                die('unable to chmod.');
+            }
         }
         error_log('[' . date('Y-m-d H:i:s', time()) . '] ' . $msg . "\n", 3, $filename);
     }
