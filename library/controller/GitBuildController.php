@@ -24,10 +24,18 @@ class GitBuildController extends AbstractController
      */
     public function go()
     {
-        if(ONLINE_ALL === "true") {
-            $this->buildToOnlineEnv();
-        } else {
-            $this->buildToGrayLevelSimulationEnv();
+        /* outer deploy type */
+        if (DEPLOY_TYPE == 'outer') {
+            if(ONLINE_ALL == "true") {
+                $this->buildToOnlineEnv();
+            } else {
+                $this->buildToGrayLevelSimulationEnv();
+            }
+        }
+
+        /* inner deploy type */
+        if (DEPLOY_TYPE == 'inner') {
+            $this->buildToInnerEnv();
         }
     }
 
@@ -143,5 +151,43 @@ class GitBuildController extends AbstractController
         /* Modify the build status */
         $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
         FileDatabase::set('build', 'lastStableBuildVersion', array('build_version' => $currentBuildVersion['build_version'], 'commit_version' => $currentBuildVersion['commit_version']));
+    }
+
+    /**
+     * Deploy to inner enviroment.
+     */
+    private function buildToInnerEnv()
+    {
+        Helper::logLn(RUNTIME_LOG, "Building to inner environment...");
+
+        /* some build info */
+        FileDatabase::set('build_' . BUILD_VERSION, 'build_time', time());
+
+        /* deploy code */
+        $repository = Config::get('common.product.cmd_path');
+        $gitModel = new GitModel($repository);
+        $gitModel->pull();
+        Sync::deploy();
+
+        /* get mail content */
+        Helper::logLn(RUNTIME_LOG, 'Get mail content, includes commit, product_description, product, test info, subject, vcs and so on...');
+        $mailModel = new MailModel(MailModel::TYPE_DEPLOY_TO_INNER_SUCCESSFULLY); 
+        $this->view->assign('data', $mailModel->getContent());
+
+        /* send mail */
+        Helper::logLn(RUNTIME_LOG, 'Sending email...');
+        $mailContent = $this->view->fetch('gitbuild/gray.tpl');
+        $sendMailResult = Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $mailContent, ATTACHMENT);
+        Helper::logLn(RUNTIME_LOG, 'Mail sent.');
+
+        /* save build infomartion */
+        Helper::logLn(RUNTIME_LOG, 'Saving build info...');
+        FileDatabase::set('build_' . BUILD_VERSION, 'mail_content', $mailContent);
+        FileDatabase::set('build_' . BUILD_VERSION, 'mail_attachment_path', ATTACHMENT);
+        FileDatabase::set('build_' . BUILD_VERSION, 'runtime_log_path', RUNTIME_LOG);
+
+        /* modify the build version */
+        Helper::logLn(RUNTIME_LOG, 'Modify build version...');
+        FileDatabase::set('build', 'lastStableBuildVersion', array('build_version' => BUILD_VERSION, 'commit_version' => $gitModel->getHead()));
     }
 }

@@ -9,6 +9,8 @@
       </div>
 
       <div class="row">
+
+        {if $data.build_description}
         <div class="col-sm-12 blog-main">
           <div class="blog-post">
             <h4 class="blog-post-title">构建信息</h4>
@@ -16,14 +18,7 @@
           </div><!-- /.blog-post -->
 
         </div><!-- /.blog-main -->
-
-        <div class="col-sm-12 blog-main">
-          <div class="blog-post">
-            <h4 class="blog-post-title">版本介绍</h4>
-            <p>{$data.product_description}</p>
-          </div><!-- /.blog-post -->
-
-        </div><!-- /.blog-main -->
+        {/if}
 
         <div class="col-sm-12 blog-main">
             <h4 class="blog-post-title">Git提交记录</h4>
@@ -65,6 +60,13 @@
                     {/foreach}
                   </tbody>
                 </table>
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-12 blog-main">
+          <div class="blog-post">
+            <h4 class="blog-post-title">版本介绍</h4>
+            <p>{$data.product_description}</p>
+          </div><!-- /.blog-post -->
         </div><!-- /.blog-main -->
 
         <div class="col-sm-12 blog-main">

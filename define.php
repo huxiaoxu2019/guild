@@ -79,12 +79,15 @@ if (APP_MODE == 'CLI') {
     }
 
     if (!defined('BUILD_VERSION')) {
-        $app_version = explode('_', APP_VERSION);
-        define('BUILD_VERSION', $app_version[1] . '_' . date('Ymd', time()) . '01');
+        define('BUILD_VERSION', APP_VERSION . '_' . date('Ymd', time()) . '01');
     }
 
     if (!defined("SHOW_COMMIT")) {
         define("SHOW_COMMIT", "true");
+    }
+
+    if (!defined('DEPLOY_TYPE')) {
+        define('DEPLOY_TYPE', 'outer');
     }
 
     if (!defined("ONLINE_ALL")) {

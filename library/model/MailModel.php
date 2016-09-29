@@ -26,6 +26,8 @@ class MailModel
     const TYPE_DEPLOY_TO_ALL_ONLINE_FAILED       = 2;
     const TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY = 3;
     const TYPE_DEPLOY_TO_GRAY_LEVEL_FAILED       = 4;
+    const TYPE_DEPLOY_TO_INNER_SUCCESSFULLY      = 5;
+    const TYPE_DEPLOY_TO_INNER_FAILED            = 6;
 
     /**
      * Deploty type.
@@ -143,6 +145,14 @@ class MailModel
                 $title = Config::get("common.app.fai_title");
                 $this->subject = sprintf($title, 'Gray level ' . BUILD_VERSION);
                 break;
+            case self::TYPE_DEPLOY_TO_INNER_SUCCESSFULLY :
+                $title = Config::get("common.app.suc_title");
+                $this->subject = sprintf($title, BUILD_VERSION);
+                break;
+            case self::TYPE_DEPLOY_TO_INNER_FAILED :
+                $title = Config::get("common.app.fai_title");
+                $this->subject = sprintf($title, BUILD_VERSION);
+                break;
             default :
                 $title = Config::get("common.app.fai_title");
                 $this->subject = sprintf($title, BUILD_VERSION);
@@ -224,16 +234,16 @@ class MailModel
         $info = '';
         switch ($this->deployType)
         {
-        case self::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY:
+        case self::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY :
             $info = $productModel->getOnlineSucInfo();
             $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
             $info = sprintf($info, $currentBuildVersion['build_version']);
-        case self::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED:
+        case self::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED :
             $info = $productModel->getOnlineFailInfo();
             $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
             $info = sprintf($info, $currentBuildVersion['build_version']);
             break;
-        case self::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY:
+        case self::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY :
             $info = $productModel->getGrayInfo();
             $hours = Config::get("common.build.deploy_hours");
             $plan_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:00:00', time())) + $hours * 60 * 60);
@@ -242,7 +252,7 @@ class MailModel
             $build_console_url = "<a href='{$build_console_url}'>{$build_console_url}</a>";
             $info = sprintf($info, $plan_time, $build_console_url);
             break;
-        case self::TYPE_DEPLOY_TO_GRAY_LEVEL_FAILED:
+        case self::TYPE_DEPLOY_TO_GRAY_LEVEL_FAILED :
             $info = $productModel->getGrayInfo();
             $hours = Config::get("common.build.deploy_hours");
             $plan_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:00:00', time())) + $hours * 60 * 60);
@@ -250,6 +260,9 @@ class MailModel
             $build_console_url = 'http://guild.com/BuildConsole/pushToOnline?' . http_build_query($params);
             $build_console_url = "<a href='{$build_console_url}'>{$build_console_url}</a>";
             $info = sprintf($info, $plan_time, $build_console_url);
+            break;
+        case self::TYPE_DEPLOY_TO_INNER_SUCCESSFULLY : 
+        case self:: TYPE_DEPLOY_TO_INNER_FAILED : 
             break;
         default:
             break;
