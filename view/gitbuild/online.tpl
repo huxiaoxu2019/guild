@@ -4,7 +4,7 @@
     <div class='container'>
 
       <div class="blog-header">
-        {if $type eq TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY}
+        {if $type eq 1}
         <h3 class="blog-title text-success">{$data.subject}</h1>
         {else}
         <h3 class="blog-title text-danger">{$data.subject}</h1>

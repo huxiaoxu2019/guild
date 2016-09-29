@@ -238,6 +238,7 @@ class MailModel
             $info = $productModel->getOnlineSucInfo();
             $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
             $info = sprintf($info, $currentBuildVersion['build_version']);
+            break;
         case self::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED :
             $info = $productModel->getOnlineFailInfo();
             $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
