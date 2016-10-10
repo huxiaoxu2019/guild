@@ -22,14 +22,6 @@
         </div><!-- /.blog-main -->
 
         <div class="col-sm-12 blog-main">
-          <div class="blog-post">
-            <h4 class="blog-post-title">版本介绍</h4>
-            <p>{$data.product_description}</p>
-          </div><!-- /.blog-post -->
-
-        </div><!-- /.blog-main -->
-
-        <div class="col-sm-12 blog-main">
             <h4 class="blog-post-title">Git提交记录</h4>
               <!-- Table -->
                 <table class="table table-bordered table-striped">
@@ -43,6 +35,7 @@
                     </tr>
                   </thead>
                   <tbody>
+                    {if isset($data['vcs']['commit'])}
                     {foreach from=$data.vcs item=vo}
                     <tr>
                       <td>{$vo['commit']|substr:0:8}</td>
@@ -67,9 +60,19 @@
                       <td>{$vo['date']|date_format:"%Y-%m-%d %H:%M:%S"}</td>
                     </tr>
                     {/foreach}
+                    {/if}
                   </tbody>
                 </table>
         </div><!-- /.blog-main -->
+
+        <div class="col-sm-12 blog-main">
+          <div class="blog-post">
+            <h4 class="blog-post-title">版本介绍</h4>
+            <p>{$data.product_description}</p>
+          </div><!-- /.blog-post -->
+
+        </div><!-- /.blog-main -->
+
 
         <div class="col-sm-12 blog-main">
             <h4 class="blog-post-title">内网集成测试环境</h4>
