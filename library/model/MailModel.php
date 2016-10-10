@@ -180,10 +180,12 @@ class MailModel
      */
     private function getGitInfo() 
     {
+        Helper::logLn(RUNTIME_LOG, 'getGitInfo...');
         /* db */
         $fileDatabase = new FileDatabase();
         $lastStatbleBuildVersion = FileDatabase::get('build', 'lastStableBuildVersion');
         $lastCommitHash = $lastStatbleBuildVersion['commit_version'];
+        Helper::logLn(RUNTIME_LOG, 'Get the last commit version:' . $lastCommitHash);
 
         /* git model */
         $repository = Config::get("common.product.cmd_path");
