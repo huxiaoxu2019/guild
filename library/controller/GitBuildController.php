@@ -126,15 +126,18 @@ class GitBuildController extends AbstractController
         $mailContent = $this->view->fetch('gitbuild/online.tpl');
         $sendMailResult = Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $mailContent);
         Helper::logLn(RUNTIME_LOG, 'Mail sent.');
+
+        /* modify the version */
+        Helper::logLn(RUNTIME_LOG, 'Modifying the build version...');
+        $this->modifyTheBuildVersion($status);
     }
 
     /**
      * Rollback.
      *
      * @TODO 
-     * @param $lastCommitVersion string
      */
-    private function rollBack($lastCommitVersion) 
+    private function rollBack() 
     {
         Helper::logLn(RUNTIME_LOG, 'Rollbacking...');
     }
@@ -147,10 +150,6 @@ class GitBuildController extends AbstractController
     private function deployToAllOnline() 
     {
         Helper::logLn(RUNTIME_LOG, 'deployToAllOnline...');
-
-        /* Modify the build status */
-        $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
-        FileDatabase::set('build', 'lastStableBuildVersion', array('build_version' => $currentBuildVersion['build_version'], 'commit_version' => $currentBuildVersion['commit_version']));
     }
 
     /**
@@ -189,5 +188,37 @@ class GitBuildController extends AbstractController
         /* modify the build version */
         Helper::logLn(RUNTIME_LOG, 'Modify build version...');
         FileDatabase::set('build', 'lastStableBuildVersion', array('build_version' => BUILD_VERSION, 'commit_version' => $gitModel->getHead()));
+    }
+
+    /**
+     * Modify the build version.
+     *
+     * @param int $status
+     */
+    private function modifyTheBuildVersion($status) {
+        switch ($status) {
+        case BUILD_STATUS_PASSED:
+            /* deploy to all online */
+            Helper::logLn(RUNTIME_LOG, 'deploy to all online type');
+            $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
+            FileDatabase::set('build', 'lastStableBuildVersion', array('build_version' => $currentBuildVersion['build_version'], 'commit_version' => $currentBuildVersion['commit_version']));
+            break;
+        case BUILD_STATUS_NOT_PASSED:
+            Helper::logLn(RUNTIME_LOG, 'rollback type');
+            /* rollback */
+            $lastStableBuildVersion = FileDatabase::get('build', 'lastStableBuildVersion');
+            FileDatabase::set('build', 'currentBuildVersion', array('build_version' => $lastStableBuildVersion['build_version'], 'commit_version' => $lastStableBuildVersion['commit_version']));
+            break;
+        case BUILD_STATUS_DEPLOYED:
+            /* deployed */
+            Helper::logLn(RUNTIME_LOG, 'deployed type');
+            break;
+        default:
+            /* rollback */
+            Helper::logLn(RUNTIME_LOG, 'rollback type');
+            $lastStableBuildVersion = FileDatabase::get('build', 'lastStableBuildVersion');
+            FileDatabase::set('build', 'currentBuildVersion', array('build_version' => $lastStableBuildVersion['build_version'], 'commit_version' => $lastStableBuildVersion['commit_version']));
+            break;
+        }
     }
 }
