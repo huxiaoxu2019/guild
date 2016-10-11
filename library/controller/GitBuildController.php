@@ -112,10 +112,9 @@ class GitBuildController extends AbstractController
             Helper::logLn(RUNTIME_LOG, 'This version has been deployed.');
             break;
         default:
-            /* rollback */
-            $this->view->assign('type', MailModel::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED);
-            $mailType = MailModel::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED;
-            $this->rollBack();
+            /* deploy to all online */
+            $this->view->assign('type', MailModel::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY);
+            $this->deployToAllOnline();
             break;
         }
 
@@ -214,10 +213,10 @@ class GitBuildController extends AbstractController
             Helper::logLn(RUNTIME_LOG, 'deployed type');
             break;
         default:
-            /* rollback */
-            Helper::logLn(RUNTIME_LOG, 'rollback type');
-            $lastStableBuildVersion = FileDatabase::get('build', 'lastStableBuildVersion');
-            FileDatabase::set('build', 'currentBuildVersion', array('build_version' => $lastStableBuildVersion['build_version'], 'commit_version' => $lastStableBuildVersion['commit_version']));
+            /* deploy to all online */
+            Helper::logLn(RUNTIME_LOG, 'deploy to all online type');
+            $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
+            FileDatabase::set('build', 'lastStableBuildVersion', array('build_version' => $currentBuildVersion['build_version'], 'commit_version' => $currentBuildVersion['commit_version']));
             break;
         }
     }
