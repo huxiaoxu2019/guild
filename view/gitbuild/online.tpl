@@ -35,7 +35,6 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {if isset($data['vcs']['commit'])}
                     {foreach from=$data.vcs item=vo}
                     <tr>
                       <td>{$vo['commit']|substr:0:8}</td>
@@ -60,7 +59,6 @@
                       <td>{$vo['date']|date_format:"%Y-%m-%d %H:%M:%S"}</td>
                     </tr>
                     {/foreach}
-                    {/if}
                   </tbody>
                 </table>
         </div><!-- /.blog-main -->
