@@ -9,6 +9,8 @@
 
 namespace Library\Controller;
 
+use Library\Util\Helper;
+
 abstract class AbstractController 
 {
     /**
@@ -62,5 +64,15 @@ abstract class AbstractController
         $location = $location . '?' . http_build_query($params);
         header("location:{$location}");
         exit;
+    }
+
+    /**
+     * Destructer.
+     */
+    public function __destruct() {
+        $runtime_dir = APP_PATH . '/data/runtime/';
+        if (APP_MODE != 'WEB') {
+            Helper::chmodr($runtime_dir, 0777, 0777);
+        }
     }
 }

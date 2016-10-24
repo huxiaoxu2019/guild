@@ -90,4 +90,40 @@ class Helper
         }
         return true;
     }
+
+    /**
+     * Change mode to files and directories.
+     *
+     * @param string @path
+     * @param int $filemode
+     * @param int $dirmode
+     */
+    public static function chmodr($path, $filemode, $dirmode) {
+        if (is_dir($path) ) { 
+            if (!chmod($path, $dirmode)) { 
+                $dirmode_str=decoct($dirmode); 
+                Helper::logLn(RUNTIME_LOG, "Failed applying filemode '$dirmode_str' on directory '$path'");
+                Helper::logLn(RUNTIME_LOG, "  `-> the directory '$path' will be skipped from recursive chmod\n");
+                return; 
+            } 
+            $dh = opendir($path); 
+            while (($file = readdir($dh)) !== false) { 
+                if ($file != '.' && $file != '..') {
+                    $fullpath = $path.'/'.$file; 
+                    self::chmodr($fullpath, $filemode,$dirmode); 
+                } 
+            } 
+            closedir($dh); 
+        } else { 
+            if (is_link($path)) { 
+                Helper::logLn(RUNTIME_LOG, "link '$path' is skipped\n");
+                return; 
+            } 
+            if (!chmod($path, $filemode)) { 
+                $filemode_str=decoct($filemode); 
+                Helper::logLn(RUNTIME_LOG, "Failed applying filemode '$filemode_str' on file '$path'\n");
+                return; 
+            } 
+        } 
+    }
 }
