@@ -251,7 +251,8 @@ class MailModel
             $hours = Config::get("common.build.deploy_hours");
             $plan_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:00:00', time())) + $hours * 60 * 60);
             $params = array('version' => APP_VERSION, 'build_version' => BUILD_VERSION);
-            $build_console_url = 'http://guild.com/BuildConsole/pushToOnline?' . http_build_query($params);
+            $build_domain = Config::get('common.build.build_domain');
+            $build_console_url = 'http://' . $build_domain . '/BuildConsole/pushToOnline?' . http_build_query($params);
             $build_console_url = "<a href='{$build_console_url}'>{$build_console_url}</a>";
             $info = sprintf($info, $plan_time, $build_console_url);
             break;
@@ -260,7 +261,8 @@ class MailModel
             $hours = Config::get("common.build.deploy_hours");
             $plan_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:00:00', time())) + $hours * 60 * 60);
             $params = array('version' => APP_VERSION, 'build_version' => BUILD_VERSION);
-            $build_console_url = 'http://guild.com/BuildConsole/pushToOnline?' . http_build_query($params);
+            $build_domain = Config::get('common.build.build_domain');
+            $build_console_url = 'http://' . $build_domain . '/BuildConsole/pushToOnline?' . http_build_query($params);
             $build_console_url = "<a href='{$build_console_url}'>{$build_console_url}</a>";
             $info = sprintf($info, $plan_time, $build_console_url);
             break;
