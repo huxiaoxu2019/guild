@@ -7,6 +7,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <link rel="icon" href="/favicon.ico">
+
     <title>部署控制台 - Guild</title>
 
     <!-- Bootstrap core CSS -->
