@@ -30,3 +30,8 @@ the secound `DEPLOY_TYPE:inner,ONLINE_ALL:false,VCS:git` string is the config pa
 00 23 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v6_inner_v720  DEPLOY_TYPE:inner,ONLINE_ALL:false,VCS:git &
 ```
 
+## Contribution
+
+Anybody who programs in PHP can be a contributing member of the guild project, and the contributor(s) would be listed as follow.
+
+However, any contribution should follow the [coding standard](/CODING_STANDARD.md).
