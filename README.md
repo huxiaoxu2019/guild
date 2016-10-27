@@ -6,7 +6,9 @@ This daily build(CI/CD) tool using at topic team of Weibo.com, includes taking t
 
 You could build the project just by the following cmds:
 
-`00 23 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v6_inner_v720  DEPLOY_TYPE:inner,ONLINE_ALL:false,VCS:git &`
+```
+00 23 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v6_inner_v720  DEPLOY_TYPE:inner,ONLINE_ALL:false,VCS:git &
+```
 
 The `huati_v6_inner_v720` string in the above is the config param, such as huati_v6_inner_v725, huati_v6_inner_v730 and so on.
 
