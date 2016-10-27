@@ -23,7 +23,7 @@ the secound `DEPLOY_TYPE:inner,ONLINE_ALL:false,VCS:git` string is the config pa
 00 16 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v715  ONLINE_ALL:true,VCS:git &
 ```
 
- - 内网持续构建
+ - 内网持续集成
 ```
 00 23 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v6_inner_v720  DEPLOY_TYPE:inner,ONLINE_ALL:false,VCS:git &
 ```
