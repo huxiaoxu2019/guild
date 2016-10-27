@@ -2,7 +2,7 @@
 
 This daily build(CI/CD) tool using at topic team of Weibo.com, includes taking the version control system(git, svn - to be realized) information, such as log and diff, taking the project basic information, checking(compling) the project files syntax, deploying the project to the servers automatically, sending email blah blah blah...
 
-## Demo
+## CMD Description
 
 You could build the project just by the following cmds:
 
