@@ -30,7 +30,7 @@ class GitBuildController extends AbstractController
             if(ONLINE_ALL == "true") {
                 $this->buildToOnlineEnv();
             } else {
-                $this->buildToGrayLevelSimulationEnv();
+                $this->buildToGrayLevelEnviroment();
             }
         }
 
@@ -47,7 +47,7 @@ class GitBuildController extends AbstractController
      *
      * For test now.
      */
-    private function buildToGrayLevelSimulationEnv()
+    private function buildToGrayLevelEnviroment()
     {
         Helper::logLn(RUNTIME_LOG, "Building to gray level simulation environment...");
 
