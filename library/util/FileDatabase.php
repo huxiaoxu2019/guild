@@ -111,6 +111,10 @@ class FileDatabase
      */
     public static function getFileContent($filename)
     {
-        return file_get_contents($filename); 
+        if (file_exists($filename)) {
+            return file_get_contents($filename); 
+        } else {
+            return '';
+        }
     }
 }
