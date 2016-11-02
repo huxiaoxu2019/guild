@@ -27,8 +27,17 @@ if (PHP_VERSION >= '5.3.0') {
         $pathArr = explode("\\", $class);
         $path     = APP_PATH;
         $length  = count($pathArr);
+        if ($length) {
+            if ($pathArr[0] == 'Zend') {
+                $path .= '/library/thirdparty';
+            }
+        }
         for ($i = 0; $i < $length - 1; $i++) {
-            $path .= DIRECTORY_SEPARATOR . lcfirst($pathArr[$i]); 
+            if ($pathArr[0] == 'Zend' && $i > 0) {
+                $path .= DIRECTORY_SEPARATOR . $pathArr[$i]; 
+            } else {
+                $path .= DIRECTORY_SEPARATOR . lcfirst($pathArr[$i]); 
+            }
         }
         $file    = $path . DIRECTORY_SEPARATOR . $pathArr[$length - 1] . ".php"; 
         if (file_exists($file)) {
