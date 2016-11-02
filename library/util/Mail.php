@@ -49,7 +49,9 @@ class Mail
             $mail->Body = $body; 
             $mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
             if ($attachment) {
-                $mail->AddAttachment($attachment);
+                if (file_exists($attachment)) {
+                    $mail->AddAttachment($attachment);
+                }
             }
             $mail->WordWrap = 80; 
             $mail->IsHTML(true); 
