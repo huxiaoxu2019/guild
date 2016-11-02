@@ -16,6 +16,7 @@ use Library\Util\Sync;
 use Library\Model\GitModel;
 use Library\Model\MailModel;
 use Library\Util\FileDatabase;
+use Library\Util\Build;
 
 class GitBuildController extends AbstractController
 {
@@ -59,7 +60,9 @@ class GitBuildController extends AbstractController
         $repository = Config::get('common.product.cmd_path');
         $gitModel = new GitModel($repository);
         $gitModel->pull();
-        Sync::deploy();
+        $build = new Build();
+        Helper::logLn(RUNTIME_LOG, 'Build to gray level enviroment...');
+        $build->buildToGrayLevelEnviroment();
 
         /* get mail content */
         Helper::logLn(RUNTIME_LOG, 'Get mail content, includes commit, product_description, product, test info, subject, vcs and so on...');
