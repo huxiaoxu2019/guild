@@ -21,16 +21,45 @@ class Build implements BuildInterface
 {
     /*
      * Build to gray level enviroment.
+     *
+     * @param array $params
+     *
+     * @return bool
      */
-    public function buildToGrayLevelEnviroment() {}
+    public function buildToGrayLevelEnviroment($params = array()) {
+        return false;
+    }
 
     /**
      * Build to online enviroment.
+     *
+     * @param array $params
+     *
+     * @return bool
      */
-    public function buildToOnlineEnviroment() {}
+    public function buildToOnlineEnviroment($params = array()) {
+        return false;
+    }
+
+    /*
+     * Get the list of rollback packages.
+     *
+     * @param array $params
+     *
+     * @return array such as array('v1.0.1', 'v1.0.0', 'v0.9.2', 'v.0.9.1')
+     */
+    public function getRollbackList($params = array()) {
+        return array();
+    }
 
     /**
-     * Get rollback list.
+     * Rollback.
+     *
+     * @param array @params
+     * 
+     * @return bool
      */
-    public function getRollbackList() {}
+    public function rollback($params = array()) {
+        return false;
+    }
 }
