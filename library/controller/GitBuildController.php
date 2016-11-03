@@ -223,19 +223,22 @@ class GitBuildController extends AbstractController
      *
      * @param int $status
      */
-    private function modifyTheBuildVersion($status) {
+    private function modifyTheBuildVersion($status)
+    {
         switch ($status) {
         case BUILD_STATUS_PASSED:
             /* deploy to all online */
             Helper::logLn(RUNTIME_LOG, 'deploy to all online type');
             $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
-            FileDatabase::set('build', 'lastStableBuildVersion', array('build_version' => $currentBuildVersion['build_version'], 'commit_version' => $currentBuildVersion['commit_version']));
+            FileDatabase::set('build', 'lastStableBuildVersion', 
+                array('build_version' => $currentBuildVersion['build_version'], 'commit_version' => $currentBuildVersion['commit_version']));
             break;
         case BUILD_STATUS_NOT_PASSED:
             Helper::logLn(RUNTIME_LOG, 'rollback type');
             /* rollback */
             $lastStableBuildVersion = FileDatabase::get('build', 'lastStableBuildVersion');
-            FileDatabase::set('build', 'currentBuildVersion', array('build_version' => $lastStableBuildVersion['build_version'], 'commit_version' => $lastStableBuildVersion['commit_version']));
+            FileDatabase::set('build', 'currentBuildVersion', 
+                array('build_version' => $lastStableBuildVersion['build_version'], 'commit_version' => $lastStableBuildVersion['commit_version']));
             break;
         case BUILD_STATUS_DEPLOYED:
             /* deployed */
@@ -245,7 +248,8 @@ class GitBuildController extends AbstractController
             /* deploy to all online */
             Helper::logLn(RUNTIME_LOG, 'deploy to all online type');
             $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
-            FileDatabase::set('build', 'lastStableBuildVersion', array('build_version' => $currentBuildVersion['build_version'], 'commit_version' => $currentBuildVersion['commit_version']));
+            FileDatabase::set('build', 'lastStableBuildVersion', 
+                array('build_version' => $currentBuildVersion['build_version'], 'commit_version' => $currentBuildVersion['commit_version']));
             break;
         }
     }
