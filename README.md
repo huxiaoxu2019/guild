@@ -7,8 +7,8 @@ This daily build(CI/CD) tool using at topic team of Weibo.com, includes taking t
 Sorry for that this project is not completed, and the description(README.md) is poor. So if you have a strong desire to know or use the project, please contact me as the follow in chinese. 
 
 ## TODO
-- [CD]Deploy to all online servers.
-- [CD]Merge build branch to master branch before Deploy to all online servers step.
+- [CD]Deploy to all the online servers.
+- [CD]Merge build branch to master branch before deploying to all online servers step.
 
 ## CMD Description
 
