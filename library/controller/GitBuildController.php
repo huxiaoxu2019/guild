@@ -107,7 +107,7 @@ class GitBuildController extends AbstractController
             /* rollback */
             $this->view->assign('type', MailModel::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED);
             $mailType = MailModel::TYPE_DEPLOY_TO_ALL_ONLINE_FAILED;
-            $this->rollback($lastStatbleBuildVersion['commit_version']);
+            $this->rollback();
             break;
         case BUILD_STATUS_DEPLOYED:
             /* deployed */
@@ -142,6 +142,32 @@ class GitBuildController extends AbstractController
     private function rollBack() 
     {
         Helper::logLn(RUNTIME_LOG, 'Rollbacking...');
+        $build = new Build();
+        $params = array();
+
+        $rollbackList = $build->getRollbackList(array('piplinedefid' => Build::BUILD_V5_ROLLBACK));
+        $rollbackVersion = '';
+        if (!empty($rollbackList[1])) {
+           $rollbackVersion = $rollbackList[1];
+        } else {
+            Helper::logLn(RUNTIME_LOG, 'Rollback failed');
+            return false;
+        }
+        $params[0]['piplinedefid'] = Build::BUILD_V5_ROLLBACK;
+        $params[0]['rollback_version'] = $rollbackVersion;
+
+        $rollbackList = $build->getRollbackList(array('piplinedefid' => Build::BUILD_V6_ROLLBACK));
+        if (!empty($rollbackList[1])) {
+           $rollbackVersion = $rollbackList[1];
+        } else {
+            Helper::logLn(RUNTIME_LOG, 'Rollback failed');
+            return false;
+        }
+        $params[1]['piplinedefid'] = Build::BUILD_V6_ROLLBACK;
+        $params[1]['rollback_version'] = $rollbackVersion;
+        Helper::logLn(RUNTIME_LOG, 'Get the rollback params:' . var_export($params, true));
+
+        return $build->rollback($params);
     }
 
     /**
