@@ -9,6 +9,7 @@ Sorry for that this project is not completed, and the description(README.md) is 
 ## TODO
 - [CD]Deploy to all the online servers.
 - [CD]Merge build branch to master branch before deploying to all online servers step.
+- Support for SVN repository.
 
 ## CMD Description
 
