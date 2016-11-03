@@ -28,7 +28,7 @@ class GitBuildController extends AbstractController
         /* outer deploy type */
         if (DEPLOY_TYPE == 'outer') {
             if(ONLINE_ALL == "true") {
-                $this->buildToOnlineEnv();
+                $this->buildToOnlineEnviroment();
             } else {
                 $this->buildToGrayLevelEnviroment();
             }
@@ -89,7 +89,7 @@ class GitBuildController extends AbstractController
     /**
      * Build to all online environment.
      */
-    private function buildToOnlineEnv()
+    private function buildToOnlineEnviroment()
     {
         /* Build to all online environment */
         Helper::logLn(RUNTIME_LOG, 'build to all online environment...');
