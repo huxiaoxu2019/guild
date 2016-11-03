@@ -26,7 +26,8 @@ class Build implements BuildInterface
      *
      * @return bool
      */
-    public function buildToGrayLevelEnviroment($params = array()) {
+    public function buildToGrayLevelEnviroment($params = array())
+    {
         return false;
     }
 
@@ -37,7 +38,8 @@ class Build implements BuildInterface
      *
      * @return bool
      */
-    public function buildToOnlineEnviroment($params = array()) {
+    public function buildToOnlineEnviroment($params = array())
+    {
         return false;
     }
 
@@ -48,7 +50,8 @@ class Build implements BuildInterface
      *
      * @return array such as array('v1.0.1', 'v1.0.0', 'v0.9.2', 'v.0.9.1')
      */
-    public function getRollbackList($params = array()) {
+    public function getRollbackList($params = array())
+    {
         return array();
     }
 
@@ -59,7 +62,8 @@ class Build implements BuildInterface
      * 
      * @return bool
      */
-    public function rollback($params = array()) {
+    public function rollback($params = array())
+    {
         return false;
     }
 }
