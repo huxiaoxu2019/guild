@@ -59,7 +59,7 @@ class GitBuildController extends AbstractController
         /* deploy code */
         $repository = Config::get('common.product.cmd_path');
         $gitModel = new GitModel($repository);
-        $gitModel->pull();
+        $gitModel->pull(Config::get('common.build.git_remote'), Config::get('common.build.git_branch'));
         $build = new Build();
         Helper::logLn(RUNTIME_LOG, 'Build to gray level enviroment...');
         $build->buildToGrayLevelEnviroment();
@@ -193,7 +193,7 @@ class GitBuildController extends AbstractController
         /* deploy code */
         $repository = Config::get('common.product.cmd_path');
         $gitModel = new GitModel($repository);
-        $gitModel->pull();
+        $gitModel->pull(Config::get('common.build.git_remote'), Config::get('common.build.git_branch'));
         Sync::deploy();
 
         /* get mail content */
