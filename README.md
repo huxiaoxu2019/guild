@@ -4,7 +4,7 @@ This daily build(CI/CD) tool using at topic team of Weibo.com, includes taking t
 
 ## NOTICE
 
-Sorry for that this project is not completed, and the description(README.md) is poor. So if you have a strong desire to know or use the project, please contact me as the follow in chinese. 
+Sorry for that this project is not completed, and the description(README.md) is poor. So if you have a strong desire to know or use the project, please contact me as follow. 
 
 ## TODO
 - [CD]Deploy to all the online servers.
