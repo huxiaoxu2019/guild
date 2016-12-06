@@ -36,7 +36,7 @@ the secound `DEPLOY_TYPE:inner,ONLINE_ALL:false,VCS:git` string is the config pa
 00 16 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v715  ONLINE_ALL:true,VCS:git &
 ```
 
-You will got the page, after exec the first cmd.
+You will get the page, after exec the first cmd.
 
 ![](https://github.com/GenialX/guild/blob/master/demo/build_console_1.png?raw=true)
 
