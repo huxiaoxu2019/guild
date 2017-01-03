@@ -149,4 +149,55 @@ class GitModel
         $hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git rev-parse HEAD 2>&1");    
         return trim($hup, "\n");
     }
+
+    /**
+     * Git checkout.
+     *
+     * @param $branch string
+     *
+     * @return string
+     */
+    public function checkout($branch = 'master') 
+    {
+        $hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git checkout {$branch} 2>&1");    
+        return $hup;
+    }
+
+    /**
+     * Git merge.
+     *
+     * @param $branch string
+     *
+     * @return string
+     */
+    public function merge($branch = 'master') 
+    {
+        $hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git merge {$branch} 2>&1");    
+        return $hup;
+    }
+
+    /**
+     * Git mergetool.
+     *
+     * @return string
+     */
+    public function mergetool() 
+    {
+        $hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git mergetool 2>&1");    
+        return $hup;
+    }
+
+    /**
+     * Git push.
+     *
+     * @param $name string
+     * @param $branch string
+     *
+     * @return string
+     */
+    public function push($name = 'origin', $branch = 'master') 
+    {
+        $hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git push {$name} {$branch} 2>&1");    
+        return $hup;
+    }
 }

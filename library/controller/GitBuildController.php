@@ -27,11 +27,16 @@ class GitBuildController extends AbstractController
     {
         /* outer deploy type */
         if (DEPLOY_TYPE == 'outer') {
-            if(ONLINE_ALL == "true") {
+            if(ONLINE_ALL == 'true') {
                 $this->buildToOnlineEnviroment();
             } else {
                 $this->buildToGrayLevelEnviroment();
             }
+            /*
+                if (ONLINE_ALL == 'outer_master_to_build') {
+                    $this->mergeMasterToBuild();
+                }
+             */
         }
 
         /* inner deploy type */
@@ -251,6 +256,31 @@ class GitBuildController extends AbstractController
             FileDatabase::set('build', 'lastStableBuildVersion', 
                 array('build_version' => $currentBuildVersion['build_version'], 'commit_version' => $currentBuildVersion['commit_version']));
             break;
+        }
+    }
+
+    /**
+     * Merge the master to build.
+     */
+    private function mergeMasterToBuild()
+    {
+        $repository = Config::get('common.product.cmd_path');
+        $gitModel = new GitModel($repository);
+        $info = $gitModel->checkout('master');
+        Helper::logLn(RUNTIME_LOG, "checkout master\n" . $info);
+        $info = $gitModel->pull(Config::get('common.build.git_remote'), 'master');
+        Helper::logLn(RUNTIME_LOG, "pull master\n" . $info);
+        $info = $gitModel->checkout(Config::get('common.build.git_branch'));
+        Helper::logLn(RUNTIME_LOG, "checkout build\n" . $info);
+        $info = $gitModel->pull(Config::get('common.build.git_remote'), Config::get('common.build.git_branch'));
+        Helper::logLn(RUNTIME_LOG, "pull build\n" . $info);
+        $info =$gitModel->merge(Config::get('common.build.git_remote'), 'master');
+        Helper::logLn(RUNTIME_LOG, "merge master to build\n" . $info);
+        $info =$gitModel->push(Config::get('common.build.git_remote'), 'build');
+        Helper::logLn(RUNTIME_LOG, "git push origin build\n" . $info);
+        $info = $gitModel->mergetool();
+        if (strpos('No files need merging', $info) !== false) {
+            // merge conflict
         }
     }
 }
