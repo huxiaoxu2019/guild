@@ -4,7 +4,7 @@ This daily build(CI/CD) tool using at topic team of Weibo.com, includes taking t
 
 ## NOTICE
 
-Sorry for that this project is not completed, and the description(README.md) is poor. So if you have a strong desire to know or use the project, please contact me as the follow in chinese. 
+Sorry for that this project is not completed, and the description(README.md) is poor. So if you have a strong desire to know or use the project, please contact me as follow. 
 
 ## TODO
 - [CD]Deploy to all the online servers.
@@ -35,6 +35,14 @@ the secound `DEPLOY_TYPE:inner,ONLINE_ALL:false,VCS:git` string is the config pa
 00 10 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v715  ONLINE_ALL:false,VCS:git &
 00 16 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v715  ONLINE_ALL:true,VCS:git &
 ```
+
+You will get the page, after exec the first cmd.
+
+![](https://github.com/GenialX/guild/blob/master/demo/build_console_1.png?raw=true)
+
+![](https://github.com/GenialX/guild/blob/master/demo/build_console_2.png?raw=true)
+
+![](https://github.com/GenialX/guild/blob/master/demo/build_console_3.png?raw=true)
 
  - CI
 ```
