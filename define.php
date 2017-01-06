@@ -90,6 +90,13 @@ if (APP_MODE == 'CLI') {
         define('DEPLOY_TYPE', 'outer');
     }
 
+    if (!defined('ACTION_TYPE')) {
+        define('ACTION_TYPE', 'build_to_gray_enviroment');
+    }
+
+    /**
+     * @deprecated
+     */
     if (!defined("ONLINE_ALL")) {
         define("ONLINE_ALL", "false");
     }

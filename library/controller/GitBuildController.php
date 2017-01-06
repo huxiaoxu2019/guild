@@ -27,16 +27,19 @@ class GitBuildController extends AbstractController
     {
         /* outer deploy type */
         if (DEPLOY_TYPE == 'outer') {
-            if(ONLINE_ALL == 'true') {
+            switch (ACTION_TYPE) {
+            case 'build_to_online_enviroment' :
                 $this->buildToOnlineEnviroment();
-            } else {
+                break;
+            case 'build_to_gray_enviroment' :
                 $this->buildToGrayLevelEnviroment();
+                break;
+            case 'merge_master_to_build':
+                $this->mergeMasterToBuild();
+                break;
+            default:
+                break;
             }
-            /*
-                if (ONLINE_ALL == 'outer_master_to_build') {
-                    $this->mergeMasterToBuild();
-                }
-             */
         }
 
         /* inner deploy type */
@@ -177,12 +180,13 @@ class GitBuildController extends AbstractController
 
     /**
      * Deploy to all online.
-     *
-     * @TODO
      */
     private function deployToAllOnline() 
     {
         Helper::logLn(RUNTIME_LOG, 'deployToAllOnline...');
+        $build = new Build();
+        Helper::logLn(RUNTIME_LOG, 'Build to all online enviroment...');
+        $build->buildToOnlineEnviroment();
     }
 
     /**

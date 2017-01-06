@@ -32,8 +32,8 @@ the secound `DEPLOY_TYPE:inner,ONLINE_ALL:false,VCS:git` string is the config pa
 
  - CD
 ```
-00 10 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v715  ONLINE_ALL:false,VCS:git &
-00 16 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v715  ONLINE_ALL:true,VCS:git &
+00 10 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v715  DEPLOY_TYPE:outer,ACTION_TYPE:online_all,VCS:git &
+00 16 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v715  DEPLOY_TYPE:outer,ACTION_TYPE:gray_all,VCS:git &
 ```
 
 You will get the page, after exec the first cmd.
@@ -46,7 +46,7 @@ You will get the page, after exec the first cmd.
 
  - CI
 ```
-00 23 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v6_inner_v720  DEPLOY_TYPE:inner,ONLINE_ALL:false,VCS:git &
+00 23 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v6_inner_v720  DEPLOY_TYPE:inner,VCS:git &
 ```
 
 ## Contribution

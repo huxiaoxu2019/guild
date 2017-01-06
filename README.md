@@ -31,8 +31,9 @@ Guild是一款持续集成与部署的工具，目前正应用在微博话题组
 
  - 持续部署
 ```
-00 10 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v715  ONLINE_ALL:false,VCS:git &
-00 16 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v715  ONLINE_ALL:true,VCS:git &
+00 6 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v715  DEPLOY_TYPE:outer,ACTION_TYPE:merge_master_to_build,VCS:git &
+00 10 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v715  DEPLOY_TYPE:outer,ACTION_TYPE:online_all,VCS:git &
+00 16 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v715  DEPLOY_TYPE:outer,ACTION_TYPE:gray_all,VCS:git &
 ```
 
 在执行上述命令后，您会看到如下的界面。
@@ -45,7 +46,7 @@ Guild是一款持续集成与部署的工具，目前正应用在微博话题组
 
  - 持续集成
 ```
-00 23 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v6_inner_v720  DEPLOY_TYPE:inner,ONLINE_ALL:false,VCS:git &
+00 23 * * * /usr/local/bin/php /data1/www/htdocs/guild.com/bootstrap.php huati_v6_inner_v720  DEPLOY_TYPE:inner,VCS:git &
 ```
 
 ## 贡献
