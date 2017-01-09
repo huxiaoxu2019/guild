@@ -29,12 +29,14 @@ class FileDatabase
      *
      * @param $filename string
      * @param $key string
+     * @param $subDir string
+     *
      * @return mixed
      */
-    public static function get($filename, $key = '') 
+    public static function get($filename, $key = '', $subDir = '') 
     {
         Helper::logLn(RUNTIME_LOG, "file database get filename:{$filename} key:{$key}...");
-        $filepath = self::getFilePath($filename);
+        $filepath = self::getFilePath($filename, $subDir);
         $result = array();
         if ($filepath) {
             $filesize = filesize($filepath);
@@ -61,13 +63,15 @@ class FileDatabase
      * @param $filename string
      * @param $key string
      * @param $value mixed
+     * @param $subDir string
+     *
      * @return bool
      */
-    public static function set($filename, $key, $value) 
+    public static function set($filename, $key, $value, $subDir = '') 
     {
-        $filepath = self::getFilePath($filename);
+        $filepath = self::getFilePath($filename, $subDir);
         if ($filepath) {
-            $originalValue = self::get($filename);
+            $originalValue = self::get($filename, '', $subDir);
             $originalValue[$key] = $value;
             $originalValue = json_encode($originalValue);
             if (strlen($originalValue) > self::MAX_DB_BYTES) {
@@ -85,11 +89,17 @@ class FileDatabase
      * Get the db filepath.
      *
      * @param $filename string 
+     * @param $subDir   string 
+     *
      * @return string
      */
-    private static function getFilePath($filename) 
+    private static function getFilePath($filename, $subDir = '') 
     {
-        $filename = APP_PATH . '/db/' . APP_VERSION . '/' . $filename;
+        if ($subDir) {
+            $filename = APP_PATH . '/db/' . APP_NAME . '/' . $subDir . '/' . $filename;
+        } else {
+            $filename = APP_PATH . '/db/' . APP_NAME . '/' . $filename;
+        }
         if (!file_exists($filename)) {
             $fileHandle = fopen($filename, 'w');
             if (!$fileHandle) {

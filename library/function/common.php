@@ -50,10 +50,10 @@ function check_app_version()
     if (!defined('APP_VERSION')) {
         return false;
     }
-    if (!file_exists(APP_PATH . '/config/' . APP_VERSION)) {
+    if (!file_exists(APP_PATH . '/config/' . APP_NAME)) {
         return false;
     }
-    if (!file_exists(APP_PATH . '/db/' . APP_VERSION)) {
+    if (!file_exists(APP_PATH . '/db/' . APP_NAME)) {
         return false;
     }
     return true;
@@ -69,7 +69,7 @@ function check_build_version()
     if (!defined('BUILD_VERSION')) {
         return false;
     }
-    if (!file_exists(APP_PATH . '/db/' . APP_VERSION . '/build_' . BUILD_VERSION)) {
+    if (!file_exists(APP_PATH . '/db/' . APP_NAME . '/build_' . BUILD_VERSION)) {
         return false;
     }
     return true;

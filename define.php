@@ -61,7 +61,7 @@ if (!defined('BUILD_STATUS_NOT_PASSED')) {
 /* CLI DEFINE */
 if (APP_MODE == 'CLI') {
     if (isset($argv[1])) {
-        define("APP_VERSION", $argv[1]);
+        define("APP_NAME", $argv[1]);
     } else {
         die("error param");
     }
@@ -79,7 +79,7 @@ if (APP_MODE == 'CLI') {
     }
 
     if (!defined('BUILD_VERSION')) {
-        define('BUILD_VERSION', APP_VERSION . '_' . date('Ymd', time()) . '01');
+        define('BUILD_VERSION', APP_NAME . '_%s_' . date('Ymd', time()) . '01');
     }
 
     if (!defined("SHOW_COMMIT")) {
@@ -133,9 +133,9 @@ if (APP_MODE == 'WEB') {
         define('ACTION_NAME', isset($path_info[1]) ? $path_info[1] : '');
     }
 
-    $app_version = filter_input(INPUT_GET, 'version', FILTER_SANITIZE_STRING);
-    if ($app_version && !defined('APP_VERSION')) {
-        define('APP_VERSION', $app_version);
+    $app_name = filter_input(INPUT_GET, 'app_name', FILTER_SANITIZE_STRING);
+    if ($app_name && !defined('APP_NAME')) {
+        define('APP_NAME', $app_name);
     }
 
     $build_version = filter_input(INPUT_GET, 'build_version', FILTER_SANITIZE_STRING);

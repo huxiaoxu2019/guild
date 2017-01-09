@@ -47,6 +47,6 @@ class BuildConsoleController extends AbstractController
     public function setBuildStatus() {
         $status = filter_input(INPUT_GET, 'status', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 3)));
         FileDatabase::set('build_' . BUILD_VERSION, 'status', $status);
-        $this->redirect('/BuildConsole/pushToOnline', array('version' => APP_VERSION, 'build_version' => BUILD_VERSION));
+        $this->redirect('/BuildConsole/pushToOnline', array('app_name' => APP_NAME, 'build_version' => BUILD_VERSION));
     }
 }

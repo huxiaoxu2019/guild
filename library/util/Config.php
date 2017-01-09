@@ -24,11 +24,15 @@ class Config
      * @param $path string
      * @return mixed
      */
-    public static function get($path)
+    public static function get($path, $subDir = '')
     {
         if (!isset(self::$_config[$path])) {
             $arr    = explode('.', $path);
-            $conf   = parse_ini_file(APP_PATH . '/config/' . APP_VERSION . '/' . $arr[0] . '.ini', true);
+            if ($subDir) {
+                $conf   = parse_ini_file(APP_PATH . '/config/' . APP_NAME . '/' . $subDir . '/' . $arr[0] . '.ini', true);
+            } else {
+                $conf   = parse_ini_file(APP_PATH . '/config/' . APP_NAME . '/' . $arr[0] . '.ini', true);
+            }
             $length = count($arr);
             for ($i = 1; $i < $length; $i++) {
                 if (isset($conf[$arr[$i]])) {

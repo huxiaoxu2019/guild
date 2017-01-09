@@ -62,8 +62,8 @@
             {elseif $data.build_status eq BUILD_STATUS_NOT_PASSED}
                 <button type="button" class="btn btn-danger disabled">未通过</button>
             {else}
-                <a href='/BuildConsole/setBuildStatus?version={APP_VERSION}&build_version={BUILD_VERSION}&status={BUILD_STATUS_PASSED}'><button type="button" class="btn btn-success">通过</button></a>
-                <a href='/BuildConsole/setBuildStatus?version={APP_VERSION}&build_version={BUILD_VERSION}&status={BUILD_STATUS_NOT_PASSED}'><button type="button" class="btn btn-danger">驳回</button></a>
+                <a href='/BuildConsole/setBuildStatus?version={APP_NAME}&build_version={BUILD_VERSION}&status={BUILD_STATUS_PASSED}'><button type="button" class="btn btn-success">通过</button></a>
+                <a href='/BuildConsole/setBuildStatus?version={APP_NAME}&build_version={BUILD_VERSION}&status={BUILD_STATUS_NOT_PASSED}'><button type="button" class="btn btn-danger">驳回</button></a>
             {/if}
             </p>
         </div>

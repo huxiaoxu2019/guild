@@ -67,7 +67,7 @@ class SVNModel
      */
     public function getLastVer()
     {
-        $file = APP_PATH . '/db/' . APP_VERSION . '/' . 'svn';
+        $file = APP_PATH . '/db/' . APP_NAME . '/' . 'svn';
         $handler = fopen($file, "r");
         $version = null;
         while (!feof($handler)) {
@@ -96,7 +96,7 @@ class SVNModel
         if (!isset($version)) {
             throw new \Exception("Unset version var.");
         }
-        $file = APP_PATH . '/db/' . APP_VERSION . '/' . 'svn';
+        $file = APP_PATH . '/db/' . APP_NAME . '/' . 'svn';
         $handler = fopen($file, "r+");
         $content = "";
         while (!feof($handler)) {

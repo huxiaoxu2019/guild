@@ -21,6 +21,24 @@ use Library\Util\Build;
 class GitBuildController extends AbstractController
 {
     /**
+     * The app version to build.
+     */
+    private $appVersion;
+
+    /**
+     * The build version.
+     */
+    private $buildVersion;
+
+    /**
+     * Constructor.
+     */
+    public function __construct($appVersion) {
+        $this->appVersion = $appVersion;
+        $this->buildVersion = sprintf(BUILD_VERSION, $appVersion);
+    }
+
+    /**
      * Build method.
      */
     public function go()
@@ -60,15 +78,15 @@ class GitBuildController extends AbstractController
         Helper::logLn(RUNTIME_LOG, "Building to gray level simulation environment...");
 
         /* some build info */
-        FileDatabase::set('build_' . BUILD_VERSION, 'build_time', time());
-        $hours = Config::get("common.build.deploy_hours");
-        FileDatabase::set('build_' . BUILD_VERSION, 'deploy_plan_time', strtotime(date('Y-m-d H:00:00', time() + $hours * 60 * 60)));
+        FileDatabase::set('build_' . $this->buildVersion, 'build_time', time(), $this->appVersion);
+        $hours = Config::get("common.build.deploy_hours", $this->appVersion);
+        FileDatabase::set('build_' . $this->buildVersion, 'deploy_plan_time', strtotime(date('Y-m-d H:00:00', time() + $hours * 60 * 60)), $this->appVersion);
 
         /* deploy code */
-        $repository = Config::get('common.product.cmd_path');
+        $repository = Config::get('common.product.cmd_path', $this->appVersion);
         $gitModel = new GitModel($repository);
-        $gitModel->pull(Config::get('common.build.git_remote'), Config::get('common.build.git_branch'));
-        $build = new Build();
+        $gitModel->pull(Config::get('common.build.git_remote', $this->appVersion), Config::get('common.build.git_branch', $this->appVersion));
+        $build = new Build(['app_version' => $this->appVersion]);
         Helper::logLn(RUNTIME_LOG, 'Build to gray level enviroment...');
         $build->buildToGrayLevelEnviroment();
 
@@ -85,13 +103,13 @@ class GitBuildController extends AbstractController
 
         /* save build infomartion */
         Helper::logLn(RUNTIME_LOG, 'Saving build info...');
-        FileDatabase::set('build_' . BUILD_VERSION, 'mail_content', $mailContent);
-        FileDatabase::set('build_' . BUILD_VERSION, 'mail_attachment_path', ATTACHMENT);
-        FileDatabase::set('build_' . BUILD_VERSION, 'runtime_log_path', RUNTIME_LOG);
+        FileDatabase::set('build_' . sprintf(BUILD_VERSION, $this->appVersion), 'mail_content', $mailContent);
+        FileDatabase::set('build_' . sprintf(BUILD_VERSION, $this->appVersion), 'mail_attachment_path', ATTACHMENT);
+        FileDatabase::set('build_' . sprintf(BUILD_VERSION, $this->appVersion), 'runtime_log_path', RUNTIME_LOG);
 
         /* modify the build version */
         Helper::logLn(RUNTIME_LOG, 'Modify build version...');
-        FileDatabase::set('build', 'currentBuildVersion', array('build_version' => BUILD_VERSION, 'commit_version' => $gitModel->getHead()));
+        FileDatabase::set('build', 'currentBuildVersion', array('build_version' => sprintf(BUILD_VERSION, $this->appVersion), 'commit_version' => $gitModel->getHead()));
     }
 
     /**

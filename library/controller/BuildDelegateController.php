@@ -11,6 +11,7 @@ namespace Library\Controller;
 
 use Library\Controller\GitBuildController;
 use Library\Controller\SVNBuildController;
+use Library\Util\Config;
 
 /**
  * Build delegate class.
@@ -37,9 +38,12 @@ class BuildDelegateController
      */
     public function go($type = self::SVN)
     {
-        $controllerName = $this->_getCSV($type);
-        $this->build = new $controllerName();
-        $this->build->go();
+        $controllerName = $this->getCSV($type);
+        $appVersions = $this->getAppVersions();
+        foreach ($appVersions as $appVersion) {
+            $this->build = new $controllerName($appVersion);
+            $this->build->go();
+        }
     }
 
     /**
@@ -47,7 +51,7 @@ class BuildDelegateController
      *
      * @return int
      */
-    private function _getCSV($type)
+    private function getCSV($type)
     {
         switch ($type) {
         case VCS_GIT:
@@ -61,5 +65,12 @@ class BuildDelegateController
             break;
         }
         return $vcs;
+    }
+
+    /**
+     * Get the app versions.
+     */
+    private function getAppVersions() {
+        return Config::get('common.app_versions');
     }
 }
