@@ -24,9 +24,9 @@ class Config
      * @param $path string
      * @return mixed
      */
-    public static function get($path, $subDir = '')
+    public static function get($path, $subDir = '', $useCache = false)
     {
-        if (!isset(self::$_config[$path])) {
+        if (!$useCache || !isset(self::$_config[$path])) {
             $arr    = explode('.', $path);
             if ($subDir) {
                 $conf   = parse_ini_file(APP_PATH . '/config/' . APP_NAME . '/' . $subDir . '/' . $arr[0] . '.ini', true);
