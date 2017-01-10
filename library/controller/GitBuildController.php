@@ -36,6 +36,7 @@ class GitBuildController extends AbstractController
     public function __construct($appVersion) {
         $this->appVersion = $appVersion;
         $this->buildVersion = sprintf(BUILD_VERSION, $appVersion);
+        parent::__construct();
     }
 
     /**
@@ -92,7 +93,7 @@ class GitBuildController extends AbstractController
 
         /* get mail content */
         Helper::logLn(RUNTIME_LOG, 'Get mail content, includes commit, product_description, product, test info, subject, vcs and so on...');
-        $mailModel = new MailModel(MailModel::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY); 
+        $mailModel = new MailModel(MailModel::TYPE_DEPLOY_TO_GRAY_LEVEL_SUCCESSFULLY, $this->appVersion); 
         $this->view->assign('data', $mailModel->getContent());
 
         /* send mail */
@@ -103,13 +104,13 @@ class GitBuildController extends AbstractController
 
         /* save build infomartion */
         Helper::logLn(RUNTIME_LOG, 'Saving build info...');
-        FileDatabase::set('build_' . sprintf(BUILD_VERSION, $this->appVersion), 'mail_content', $mailContent);
-        FileDatabase::set('build_' . sprintf(BUILD_VERSION, $this->appVersion), 'mail_attachment_path', ATTACHMENT);
-        FileDatabase::set('build_' . sprintf(BUILD_VERSION, $this->appVersion), 'runtime_log_path', RUNTIME_LOG);
+        FileDatabase::set('build_' . sprintf(BUILD_VERSION, $this->appVersion), 'mail_content', $mailContent, $this->appVersion);
+        FileDatabase::set('build_' . sprintf(BUILD_VERSION, $this->appVersion), 'mail_attachment_path', ATTACHMENT, $this->appVersion);
+        FileDatabase::set('build_' . sprintf(BUILD_VERSION, $this->appVersion), 'runtime_log_path', RUNTIME_LOG, $this->appVersion);
 
         /* modify the build version */
         Helper::logLn(RUNTIME_LOG, 'Modify build version...');
-        FileDatabase::set('build', 'currentBuildVersion', array('build_version' => sprintf(BUILD_VERSION, $this->appVersion), 'commit_version' => $gitModel->getHead()));
+        FileDatabase::set('build', 'currentBuildVersion', array('build_version' => sprintf(BUILD_VERSION, $this->appVersion), 'commit_version' => $gitModel->getHead()), $this->appVersion);
     }
 
     /**

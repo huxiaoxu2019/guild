@@ -9,6 +9,8 @@
 
 namespace Library\Util;
 
+use Library\Util\Build\BuildInterface;
+
 /**
  * Build class.
  *
@@ -19,6 +21,14 @@ namespace Library\Util;
  */
 class Build implements BuildInterface
 {
+    /**
+     * The constructor.
+     */
+    public function __construct($params)
+    {
+        return false;
+    }
+
     /*
      * Build to gray level enviroment.
      *

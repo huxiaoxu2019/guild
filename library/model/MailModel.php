@@ -175,7 +175,7 @@ class MailModel
      */
     private function getProductInfo() 
     {
-        $productModel = new ProductModel();    
+        $productModel = new ProductModel($this->appVersion);
         return $productModel->getInfo();
     }
 
@@ -226,7 +226,7 @@ class MailModel
      */
     private function getProductDescriptionInfo()
     {
-        $productModel = new ProductModel();    
+        $productModel = new ProductModel($this->appVersion);    
         return $productModel->getDescriptionInfo();
     }
 
@@ -238,7 +238,7 @@ class MailModel
      * @return string
      */
     private function getBuildDescription() {
-        $productModel = new ProductModel();    
+        $productModel = new ProductModel($this->appVersion);    
         $info = '';
         switch ($this->deployType)
         {

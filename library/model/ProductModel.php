@@ -14,13 +14,22 @@ use Library\Util\Config;
 class ProductModel
 {
     /**
+     * The app version.
+     */
+    private $appVersion;
+
+    public function __construct($appVersion) {
+        $this->appVersion = $appVersion;
+    }
+
+    /**
      * Get info.
      *
      * @return mixed
      */
     public function getInfo()
     {
-        $result = Config::get("common.product");
+        $result = Config::get("common.product", $this->appVersion);
         switch (VCS) 
         {
         case VCS_GIT :
@@ -43,7 +52,7 @@ class ProductModel
      */
     public function getDescriptionInfo()
     {
-        return Config::get("common.app.desc");
+        return Config::get("common.app.desc", $this->appVersion);
     }
 
     /**
@@ -53,7 +62,7 @@ class ProductModel
      */
     public function getGrayInfo()
     {
-        return Config::get('common.app.gray_desc');
+        return Config::get('common.app.gray_desc', $this->appVersion);
     }
 
     /**
@@ -63,7 +72,7 @@ class ProductModel
      */
     public function getOnlineSucInfo()
     {
-        return Config::get('common.app.online_suc_desc');
+        return Config::get('common.app.online_suc_desc', $this->appVersion);
     }
 
     /**
@@ -73,6 +82,6 @@ class ProductModel
      */
     public function getOnlineFailInfo()
     {
-        return Config::get('common.app.online_fail_desc');
+        return Config::get('common.app.online_fail_desc', $this->appVersion);
     }
 }
