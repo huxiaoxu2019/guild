@@ -69,6 +69,8 @@ class Helper
     /**
      * Set build result to the disk.
      *
+     * @deprecated
+     *
      * @param $msg string
      */
     public static function setBuildResult($msg = self::BUILD_SUC) {
