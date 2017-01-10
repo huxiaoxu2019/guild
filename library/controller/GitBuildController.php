@@ -120,9 +120,9 @@ class GitBuildController extends AbstractController
     {
         /* Build to all online environment */
         Helper::logLn(RUNTIME_LOG, 'build to all online environment...');
-        $lastStatbleBuildVersion = FileDatabase::get('build', 'lastStableBuildVersion');
-        $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
-        $status = FileDatabase::get('build_' . $currentBuildVersion['build_version'], 'status');
+        $lastStatbleBuildVersion = FileDatabase::get('build', 'lastStableBuildVersion', $this->appVersion);
+        $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion', $this->appVersion);
+        $status = FileDatabase::get('build_' . $currentBuildVersion['build_version'], 'status', $this->appVersion);
         $mailType = MailModel::TYPE_DEPLOY_TO_ALL_ONLINE_SUCCESSFULLY;
         switch ($status) {
         case BUILD_STATUS_PASSED:
@@ -150,7 +150,7 @@ class GitBuildController extends AbstractController
 
         /* send mail*/
         Helper::logLn(RUNTIME_LOG, 'Sending email...');
-        $mailModel = new MailModel($mailType); 
+        $mailModel = new MailModel($mailType, $this->appVersion); 
         $this->view->assign('data', $mailModel->getContent());
         $mailContent = $this->view->fetch('gitbuild/online.tpl');
         $sendMailResult = Mail::send($mailModel->getTo(), $mailModel->getCc(), $mailModel->getSubject(), $mailContent);
@@ -166,10 +166,10 @@ class GitBuildController extends AbstractController
      *
      * @TODO 
      */
-    private function rollBack() 
+    private function rollback() 
     {
         Helper::logLn(RUNTIME_LOG, 'Rollbacking...');
-        $build = new Build();
+        $build = new Build(['app_version' => $this->appVersion]);
         $params = array();
 
         $rollbackList = $build->getRollbackList(array('piplinedefid' => Build::BUILD_V5_ROLLBACK));
@@ -203,7 +203,7 @@ class GitBuildController extends AbstractController
     private function deployToAllOnline() 
     {
         Helper::logLn(RUNTIME_LOG, 'deployToAllOnline...');
-        $build = new Build();
+        $build = new Build(['app_version' => $this->appVersion]);
         Helper::logLn(RUNTIME_LOG, 'Build to all online enviroment...');
         $build->buildToOnlineEnviroment();
     }
@@ -257,16 +257,18 @@ class GitBuildController extends AbstractController
         case BUILD_STATUS_PASSED:
             /* deploy to all online */
             Helper::logLn(RUNTIME_LOG, 'deploy to all online type');
-            $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
+            $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion', $this->appVersion);
             FileDatabase::set('build', 'lastStableBuildVersion', 
-                array('build_version' => $currentBuildVersion['build_version'], 'commit_version' => $currentBuildVersion['commit_version']));
+                array('build_version' => $currentBuildVersion['build_version'], 'commit_version' => $currentBuildVersion['commit_version']), 
+                $this->appVersion);
             break;
         case BUILD_STATUS_NOT_PASSED:
             Helper::logLn(RUNTIME_LOG, 'rollback type');
             /* rollback */
-            $lastStableBuildVersion = FileDatabase::get('build', 'lastStableBuildVersion');
+            $lastStableBuildVersion = FileDatabase::get('build', 'lastStableBuildVersion', $this->appVersion);
             FileDatabase::set('build', 'currentBuildVersion', 
-                array('build_version' => $lastStableBuildVersion['build_version'], 'commit_version' => $lastStableBuildVersion['commit_version']));
+                array('build_version' => $lastStableBuildVersion['build_version'], 'commit_version' => $lastStableBuildVersion['commit_version']),
+                $this->appVersion);
             break;
         case BUILD_STATUS_DEPLOYED:
             /* deployed */
@@ -275,9 +277,10 @@ class GitBuildController extends AbstractController
         default:
             /* deploy to all online */
             Helper::logLn(RUNTIME_LOG, 'deploy to all online type');
-            $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion');
+            $currentBuildVersion = FileDatabase::get('build', 'currentBuildVersion', $this->appVersion);
             FileDatabase::set('build', 'lastStableBuildVersion', 
-                array('build_version' => $currentBuildVersion['build_version'], 'commit_version' => $currentBuildVersion['commit_version']));
+                array('build_version' => $currentBuildVersion['build_version'], 'commit_version' => $currentBuildVersion['commit_version']),
+                $this->appVersion);
             break;
         }
     }
