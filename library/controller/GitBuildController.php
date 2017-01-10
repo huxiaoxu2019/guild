@@ -85,11 +85,11 @@ class GitBuildController extends AbstractController
 
         /* deploy code */
         $repository = Config::get('common.product.cmd_path', $this->appVersion);
-        $gitModel = new GitModel($repository);
+        $gitModel = new GitModel($repository, $this->appVersion);
         $gitModel->pull(Config::get('common.build.git_remote', $this->appVersion), Config::get('common.build.git_branch', $this->appVersion));
         $build = new Build(['app_version' => $this->appVersion]);
         Helper::logLn(RUNTIME_LOG, 'Build to gray level enviroment...');
-        $build->buildToGrayLevelEnviroment();
+        //$build->buildToGrayLevelEnviroment();
 
         /* get mail content */
         Helper::logLn(RUNTIME_LOG, 'Get mail content, includes commit, product_description, product, test info, subject, vcs and so on...');
@@ -220,7 +220,7 @@ class GitBuildController extends AbstractController
 
         /* deploy code */
         $repository = Config::get('common.product.cmd_path');
-        $gitModel = new GitModel($repository);
+        $gitModel = new GitModel($repository, $this->appVersion);
         $gitModel->pull(Config::get('common.build.git_remote'), Config::get('common.build.git_branch'));
         Sync::deploy();
 
@@ -288,7 +288,7 @@ class GitBuildController extends AbstractController
     private function mergeMasterToBuild()
     {
         $repository = Config::get('common.product.cmd_path');
-        $gitModel = new GitModel($repository);
+        $gitModel = new GitModel($repository, $this->appVersion);
         $info = $gitModel->checkout('master');
         Helper::logLn(RUNTIME_LOG, "checkout master\n" . $info);
         $info = $gitModel->pull(Config::get('common.build.git_remote'), 'master');

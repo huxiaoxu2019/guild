@@ -21,13 +21,19 @@ class GitModel
     private $repository = null;
 
     /**
+     * The app version.
+     */
+    private $appVersion = '';
+
+    /**
      * Constructor.
      *
      * @param $repository string
      */
-    public function __construct($repository) 
+    public function __construct($repository, $appVersion) 
     {
         $this->repository = $repository;
+        $this->appVersion = $appVersion;
     }
 
     /**
@@ -41,7 +47,7 @@ class GitModel
      */
     public function pull($name = 'origin', $branch = 'master') 
     {
-        $hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git pull {$name} {$branch} 2>&1");    
+        $hup = shell_exec("cd " . Config::get('common.product.cmd_path', $this->appVersion) . "; git pull {$name} {$branch} 2>&1");    
         return $hup;
     }
 
@@ -53,7 +59,7 @@ class GitModel
      */
     public function logWithNameStatus($oldCommitHash, $newCommitHash = 'HEAD')
     {
-        $hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git log {$oldCommitHash}..{$newCommitHash} --name-status 2>&1");    
+        $hup = shell_exec("cd " . Config::get('common.product.cmd_path', $this->appVersion) . "; git log {$oldCommitHash}..{$newCommitHash} --name-status 2>&1");    
         $line_arr = explode("\n", $hup);
         $result = array();
         $length = count($line_arr);
@@ -78,7 +84,7 @@ class GitModel
      */
     public function diffWithNameStatus($oldCommitHash, $newCommitHash)
     {
-        $hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git diff {$oldCommitHash} {$newCommitHash} --name-status 2>&1");    
+        $hup = shell_exec("cd " . Config::get('common.product.cmd_path', $this->appVersion) . "; git diff {$oldCommitHash} {$newCommitHash} --name-status 2>&1");    
         $line_arr = explode("\n", $hup);
         return $line_arr;
     }
@@ -146,7 +152,7 @@ class GitModel
      */
     public function getHead()
     {
-        $hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git rev-parse HEAD 2>&1");    
+        $hup = shell_exec("cd " . Config::get('common.product.cmd_path', $this->appVersion) . "; git rev-parse HEAD 2>&1");    
         return trim($hup, "\n");
     }
 
@@ -159,7 +165,7 @@ class GitModel
      */
     public function checkout($branch = 'master') 
     {
-        $hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git checkout {$branch} 2>&1");    
+        $hup = shell_exec("cd " . Config::get('common.product.cmd_path', $this->appVersion) . "; git checkout {$branch} 2>&1");    
         return $hup;
     }
 
@@ -172,7 +178,7 @@ class GitModel
      */
     public function merge($branch = 'master') 
     {
-        $hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git merge {$branch} 2>&1");    
+        $hup = shell_exec("cd " . Config::get('common.product.cmd_path', $this->appVersion) . "; git merge {$branch} 2>&1");    
         return $hup;
     }
 
@@ -183,7 +189,7 @@ class GitModel
      */
     public function mergetool() 
     {
-        $hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git mergetool 2>&1");    
+        $hup = shell_exec("cd " . Config::get('common.product.cmd_path', $this->appVersion) . "; git mergetool 2>&1");    
         return $hup;
     }
 
@@ -197,7 +203,7 @@ class GitModel
      */
     public function push($name = 'origin', $branch = 'master') 
     {
-        $hup = shell_exec("cd " . Config::get('common.product.cmd_path') . "; git push {$name} {$branch} 2>&1");    
+        $hup = shell_exec("cd " . Config::get('common.product.cmd_path', $this->appVersion) . "; git push {$name} {$branch} 2>&1");    
         return $hup;
     }
 }

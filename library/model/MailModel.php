@@ -194,7 +194,7 @@ class MailModel
 
         /* git model */
         $repository = Config::get('common.product.cmd_path', $this->appVersion);
-        $gitModel = new GitModel($repository);
+        $gitModel = new GitModel($repository, $this->appVersion);
         $result = $gitModel->logWithNameStatus($lastCommitHash);        
 
         /* return */
