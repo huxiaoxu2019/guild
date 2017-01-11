@@ -28,6 +28,7 @@ class Mail
             $mail = new \PHPMailer(true); 
             $mail->IsSMTP(); 
             $mail->CharSet='UTF-8'; 
+            $mail->SMTPAutoTLS = false;
             $mail->SMTPAuth = true;
             $mail->Port = 25; 
             $mail->Host = Config::get("mail.sender.host");

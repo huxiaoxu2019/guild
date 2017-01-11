@@ -216,17 +216,17 @@ class GitBuildController extends AbstractController
         Helper::logLn(RUNTIME_LOG, "Building to inner environment...");
 
         /* some build info */
-        FileDatabase::set('build_' . BUILD_VERSION, 'build_time', time());
+        FileDatabase::set('build_' . sprintf(BUILD_VERSION, $this->appVersion), 'build_time', time(), $this->appVersion);
 
         /* deploy code */
-        $repository = Config::get('common.product.cmd_path');
+        $repository = Config::get('common.product.cmd_path', $this->appVersion);
         $gitModel = new GitModel($repository, $this->appVersion);
-        $gitModel->pull(Config::get('common.build.git_remote'), Config::get('common.build.git_branch'));
+        $gitModel->pull(Config::get('common.build.git_remote', $this->appVersion), Config::get('common.build.git_branch', $this->appVersion));
         Sync::deploy();
 
         /* get mail content */
         Helper::logLn(RUNTIME_LOG, 'Get mail content, includes commit, product_description, product, test info, subject, vcs and so on...');
-        $mailModel = new MailModel(MailModel::TYPE_DEPLOY_TO_INNER_SUCCESSFULLY); 
+        $mailModel = new MailModel(MailModel::TYPE_DEPLOY_TO_INNER_SUCCESSFULLY, $this->appVersion); 
         $this->view->assign('data', $mailModel->getContent());
 
         /* send mail */
@@ -237,13 +237,13 @@ class GitBuildController extends AbstractController
 
         /* save build infomartion */
         Helper::logLn(RUNTIME_LOG, 'Saving build info...');
-        FileDatabase::set('build_' . BUILD_VERSION, 'mail_content', $mailContent);
-        FileDatabase::set('build_' . BUILD_VERSION, 'mail_attachment_path', ATTACHMENT);
-        FileDatabase::set('build_' . BUILD_VERSION, 'runtime_log_path', RUNTIME_LOG);
+        FileDatabase::set('build_' . sprintf(BUILD_VERSION, $this->appVersion), 'mail_content', $mailContent, $this->appVersion);
+        FileDatabase::set('build_' . sprintf(BUILD_VERSION, $this->appVersion), 'mail_attachment_path', ATTACHMENT, $this->appVersion);
+        FileDatabase::set('build_' . sprintf(BUILD_VERSION, $this->appVersion), 'runtime_log_path', RUNTIME_LOG, $this->appVersion);
 
         /* modify the build version */
         Helper::logLn(RUNTIME_LOG, 'Modify build version...');
-        FileDatabase::set('build', 'lastStableBuildVersion', array('build_version' => BUILD_VERSION, 'commit_version' => $gitModel->getHead()));
+        FileDatabase::set('build', 'lastStableBuildVersion', array('build_version' => sprintf(BUILD_VERSION, $this->appVersion), 'commit_version' => $gitModel->getHead()), $this->appVersion);
     }
 
     /**
